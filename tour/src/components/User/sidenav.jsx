@@ -108,6 +108,7 @@ export default function MiniDrawer() {
     setSelectedPage(pageName);
     handleDrawerClose();
   };
+  
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -254,7 +255,7 @@ export default function MiniDrawer() {
         <DrawerHeader />
         {selectedPage === 'Home' && <Searchpage/>}
         {selectedPage === 'Gallery' && <ImageGallery />}
-        {/* Add other pages as needed */}
+
       </Box>
     </Box>
   );

@@ -1,13 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import './App.css';
 import SignUp from './components/signup';
 import Login from './components/login';
 import Homepage from './components/homepage';
 import ImageUpload from './components/imagegallery';
-import Image from './components/imagegal';
 import Manage from './components/Admin/manage';
-import Package from './components/Agent/package';
+import Package from './components/Agent/postpackage';
 import Searchpage from './components/User/searchpage';
 import Viewpage from './components/User/viewpage';
 import Booking from './components/User/booking';
@@ -16,6 +15,11 @@ import ImageGalleryPost from './components/Admin/gallerypost';
 import Viewpackage from './components/Agent/viewpackage';
 import PostHotel from './components/Agent/posthotel';
 import Viewhotel from './components/Agent/viewhotel';
+import Restaurent from './components/Agent/postrestaurent';
+import Viewrestaurent from './components/Agent/viewrestaurent';
+import Spot from './components/Agent/postspot';
+import Viewspot from './components/Agent/viewspot';
+
 function App() {
   return (
     <div>
@@ -41,6 +45,10 @@ function App() {
          <Route path="/sidenav" element={<MiniDrawer/>}/>
          <Route path="/posthotel" element={<PostHotel/>}/>
          <Route path="/viewhotel" element={<Viewhotel/>}/>
+         <Route path="/postrestaurent" element={<Restaurent/>}/>
+         <Route path="/viewrestaurent" element={<Viewrestaurent/>}/>
+         <Route path="/postspot" element={<Spot/>}/>
+         <Route path="/viewspot" element={<Viewspot/>}/>
       </Routes>
       <ToastContainer/>
     </BrowserRouter>
