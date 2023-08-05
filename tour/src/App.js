@@ -9,7 +9,7 @@ import Manage from './components/Admin/manage';
 import Package from './components/Agent/postpackage';
 import Searchpage from './components/User/searchpage';
 import Viewpage from './components/User/viewpage';
-import Booking from './components/User/booking';
+import Booking from './components/User/dummy';
 import MiniDrawer from './components/User/sidenav';
 import ImageGalleryPost from './components/Admin/gallerypost';
 import Viewpackage from './components/Agent/viewpackage';

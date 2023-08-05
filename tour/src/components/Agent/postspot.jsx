@@ -4,6 +4,7 @@ import { TextField, Button, Stack } from '@mui/material';
 
 const Spot = () => {
     const [spotName, setspotName] = useState('');
+    const [description, setDescription] = useState('');
     const [location, setLocation] = useState('');
     const [spotImage, setImage] = useState(null);
 
@@ -17,6 +18,7 @@ const Spot = () => {
 
         const formData = new FormData();
         formData.append('spotName', spotName);
+        formData.append('description', description);
         formData.append('location', location);
         formData.append('imageFile', spotImage);
 
@@ -43,7 +45,7 @@ const Spot = () => {
                         type="text"
                         variant='outlined'
                         color='secondary'
-                        label="spotName"
+                        label="Spot"
                         onChange={e => setspotName(e.target.value)}
                         value={spotName}
                         fullWidth
@@ -56,6 +58,16 @@ const Spot = () => {
                         label="Location"
                         onChange={e => setLocation(e.target.value)}
                         value={location}
+                        fullWidth
+                        required
+                    />
+                     <TextField
+                        type="text"
+                        variant='outlined'
+                        color='secondary'
+                        label="Description"
+                        onChange={e => setDescription(e.target.value)}
+                        value={description}
                         fullWidth
                         required
                     />
