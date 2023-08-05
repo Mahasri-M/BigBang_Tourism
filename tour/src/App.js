@@ -4,14 +4,13 @@ import './App.css';
 import SignUp from './components/signup';
 import Login from './components/login';
 import Homepage from './components/homepage';
-import ImageUpload from './components/imagegallery';
+import Gallery from './components/User/gallery';
 import Manage from './components/Admin/manage';
 import Package from './components/Agent/postpackage';
 import Searchpage from './components/User/searchpage';
 import Viewpage from './components/User/viewpage';
-import Booking from './components/User/dummy';
+import Booking from './components/User/booking';
 import MiniDrawer from './components/User/sidenav';
-import ImageGalleryPost from './components/Admin/gallerypost';
 import Viewpackage from './components/Agent/viewpackage';
 import PostHotel from './components/Agent/posthotel';
 import Viewhotel from './components/Agent/viewhotel';
@@ -19,6 +18,11 @@ import Restaurent from './components/Agent/postrestaurent';
 import Viewrestaurent from './components/Agent/viewrestaurent';
 import Spot from './components/Agent/postspot';
 import Viewspot from './components/Agent/viewspot';
+import AgentNav from './components/Agent/agentnav';
+import AdminNav from './components/Admin/adminnav';
+import ImageGalleryPost from './components/Admin/gallerypost';
+import Viewusers from './components/Admin/viewusers';
+import Viewagent from './components/Admin/viewagent';
 
 function App() {
   return (
@@ -31,8 +35,8 @@ function App() {
       <BrowserRouter>
       <Routes>
       <Route path="/" element={<Login/>}/>
-        <Route path="/imagegallerypost" element={<ImageGalleryPost/>}/>
-      <Route path='/img' element={<ImageUpload/>}/>
+        <Route path="/gallery" element={<Gallery/>}/>
+        <Route path="/gallerypost" element={<ImageGalleryPost/>}/>
       <Route path='/manage' element={<Manage/>}/>
         <Route path='/homepage' element={<Homepage/>}/>
          <Route path="/signup" element={<SignUp />} />
@@ -49,6 +53,10 @@ function App() {
          <Route path="/viewrestaurent" element={<Viewrestaurent/>}/>
          <Route path="/postspot" element={<Spot/>}/>
          <Route path="/viewspot" element={<Viewspot/>}/>
+         <Route path="/agentnav" element={<AgentNav/>}/>
+         <Route path="/adminnav" element={<AdminNav/>}/>
+         <Route path="/viewusers" element={<Viewusers/>}/>
+         <Route path="/viewagent" element={<Viewagent/>}/>
       </Routes>
       <ToastContainer/>
     </BrowserRouter>

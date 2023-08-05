@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Stack } from '@mui/material';
+import Viewspot from './viewspot';
 
 
 const Spot = () => {
@@ -37,10 +38,11 @@ const Spot = () => {
     }
 
     return (
+        <div>
         <React.Fragment>
-            <h2>Register Form</h2>
+            <h2>Spot</h2>
             <form onSubmit={handleSubmit}>
-                <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+               
                     <TextField
                         type="text"
                         variant='outlined'
@@ -51,6 +53,8 @@ const Spot = () => {
                         fullWidth
                         required
                     />
+                      <br></br>
+                    <br></br>
                     <TextField
                         type="text"
                         variant='outlined'
@@ -61,6 +65,8 @@ const Spot = () => {
                         fullWidth
                         required
                     />
+                     <br></br>
+                    <br></br>
                      <TextField
                         type="text"
                         variant='outlined'
@@ -71,18 +77,26 @@ const Spot = () => {
                         fullWidth
                         required
                     />
-                </Stack>
-            
+              
+              <br></br>
+                    <br></br>
                 <input
                     type="file"
                     onChange={handleImageChange}
                     accept=".jpg,.jpeg,.png"
                     required
                 />
-                <Button variant="outlined" color="secondary" type="submit">Post Spot</Button>
+                 <br></br>
+                    <br></br>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="outlined" color="secondary" type="submit">Post Spot</Button>
+                </div>
             </form>
 
         </React.Fragment>
+        <br></br>
+        <Viewspot/>
+        </div>
     )
 }
 

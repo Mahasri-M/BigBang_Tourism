@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Stack } from '@mui/material';
+import Viewhotel from './viewhotel';
 
 
 const Hotel = () => {
@@ -35,10 +36,11 @@ const Hotel = () => {
     }
 
     return (
+        <div>
         <React.Fragment>
-            <h2>Register Form</h2>
+            <h2>Hotel</h2>
             <form onSubmit={handleSubmit}>
-                <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+               
                     <TextField
                         type="text"
                         variant='outlined'
@@ -49,6 +51,8 @@ const Hotel = () => {
                         fullWidth
                         required
                     />
+                    <br></br>
+                    <br></br>
                     <TextField
                         type="text"
                         variant='outlined'
@@ -59,7 +63,8 @@ const Hotel = () => {
                         fullWidth
                         required
                     />
-                </Stack>
+               <br></br>
+                    <br></br>
             
                 <input
                     type="file"
@@ -67,10 +72,15 @@ const Hotel = () => {
                     accept=".jpg,.jpeg,.png"
                     required
                 />
-                <Button variant="outlined" color="secondary" type="submit">Post Hotel</Button>
+                 <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="outlined" color="secondary" type="submit">Post Hotel</Button>
+                </div>
             </form>
 
         </React.Fragment>
+         <br></br>
+         <Viewhotel/>
+         </div>
     )
 }
 

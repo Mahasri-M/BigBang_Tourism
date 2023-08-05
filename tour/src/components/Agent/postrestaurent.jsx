@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Stack } from '@mui/material';
+import Viewrestaurent from './viewrestaurent';
 
 
 const Restaurent = () => {
@@ -35,20 +36,23 @@ const Restaurent = () => {
     }
 
     return (
+        <div>
         <React.Fragment>
-            <h2>Register Form</h2>
+            <h2>Restaurant</h2>
             <form onSubmit={handleSubmit}>
-                <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+                
                     <TextField
                         type="text"
                         variant='outlined'
                         color='secondary'
-                        label="restaurentName"
+                        label="Restaurant Name"
                         onChange={e => setrestaurentName(e.target.value)}
                         value={restaurentName}
                         fullWidth
                         required
                     />
+                    <br></br>
+                    <br></br>
                     <TextField
                         type="text"
                         variant='outlined'
@@ -59,7 +63,8 @@ const Restaurent = () => {
                         fullWidth
                         required
                     />
-                </Stack>
+                <br></br>
+                    <br></br>
             
                 <input
                     type="file"
@@ -67,10 +72,17 @@ const Restaurent = () => {
                     accept=".jpg,.jpeg,.png"
                     required
                 />
-                <Button variant="outlined" color="secondary" type="submit">Post Restaurent</Button>
+                  <br></br>
+                    <br></br>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="outlined" color="secondary" type="submit">Post Restaurant</Button>
+                </div>
             </form>
 
         </React.Fragment>
+        <br></br>
+        <Viewrestaurent/>
+        </div>
     )
 }
 

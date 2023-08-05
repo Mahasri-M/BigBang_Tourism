@@ -16,14 +16,17 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import ContactsIcon from '@mui/icons-material/Contacts';
+import BadgeIcon from '@mui/icons-material/Badge';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PanoramaIcon from '@mui/icons-material/Panorama';
-import FeedbackIcon from '@mui/icons-material/Feedback';
-import HomeIcon from '@mui/icons-material/Home';
-import Searchpage from './searchpage';
-import Gallery from './gallery';
+import ThreePIcon from '@mui/icons-material/ThreeP';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import Manage from './manage';
+import ImageGalleryPost from './gallerypost';
+import Viewusers from './viewusers';
+import Viewagent from './viewagent';
+
 
 const drawerWidth = 240;
 
@@ -91,10 +94,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+export default function AdminNav() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [selectedPage, setSelectedPage] = React.useState('Home'); 
+  const [selectedPage, setSelectedPage] = React.useState('Manage'); 
 
 
   const handleDrawerOpen = () => {
@@ -147,12 +150,12 @@ export default function MiniDrawer() {
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
-        onClick={() => handleMenuItemClick('Home')} 
+        onClick={() => handleMenuItemClick('Manage')} 
       >
         <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-          <HomeIcon />
+          <HowToRegIcon />
         </ListItemIcon>
-        <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+        <ListItemText primary="Manage" sx={{ opacity: open ? 1 : 0 }} />
       </ListItemButton>
     </ListItem>
 
@@ -179,12 +182,12 @@ export default function MiniDrawer() {
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
-        
+        onClick={() => handleMenuItemClick('Viewusers')}    
       >
         <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-          <FeedbackIcon />
+          <ThreePIcon/>
         </ListItemIcon>
-        <ListItemText primary="Feedback" sx={{ opacity: open ? 1 : 0 }} />
+        <ListItemText primary="View Users" sx={{ opacity: open ? 1 : 0 }} />
       </ListItemButton>
     </ListItem>
 
@@ -195,11 +198,12 @@ export default function MiniDrawer() {
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
+        onClick={() => handleMenuItemClick('Viewagent')}  
       >
         <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-          <ContactsIcon />
+          <BadgeIcon />
         </ListItemIcon>
-        <ListItemText primary="Contact" sx={{ opacity: open ? 1 : 0 }} />
+        <ListItemText primary="View Agent" sx={{ opacity: open ? 1 : 0 }} />
       </ListItemButton>
     </ListItem>
   </List>
@@ -253,8 +257,11 @@ export default function MiniDrawer() {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        {selectedPage === 'Home' && <Searchpage/>}
-        {selectedPage === 'Gallery' && <Gallery />}
+        {selectedPage === 'Manage' && <Manage/>}
+        {selectedPage === 'Gallery' && <ImageGalleryPost/>}
+        {selectedPage === 'Viewusers' && <Viewusers/>}
+        {selectedPage === 'Viewagent' && <Viewagent/>}
+
 
       </Box>
     </Box>

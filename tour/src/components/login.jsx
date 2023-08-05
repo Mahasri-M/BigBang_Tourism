@@ -107,23 +107,24 @@ const Login = () => {
         console.log('Token:', token);
         console.log('Name:', userEmail);
         console.log('Role:', decodedToken.role);
+        console.log('nameid', decodedToken.nameid);
+        localStorage.setItem('nameid', decodedToken.nameid);
         if (decodedToken.role === "Admin") {
           toast.success('Hi Admin Login Successful');
-          navigate("/manage");
+          navigate("/adminnav");
         }
         else if(decodedToken.role === "Agent"){
           toast.success('Hi Agent Login Successful');
-          navigate("/package");
+          navigate("/agentnav");
         }
         else if(decodedToken.role === "User"){
           toast.success('Hi User Login Successful');
-          navigate("/homepage");
+          navigate("/sidenav");
         }
         else{
           toast.danger('Invalid Credentials');
         }
-        // toast.success('Login Successful');
-        // navigate("/homepage");
+       
 
       } else {
         console.error('Error during login:', response);

@@ -1,35 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Carousel, CarouselItem, CarouselControl, CarouselIndicators} from 'reactstrap';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import { Carousel, CarouselItem, CarouselControl, CarouselIndicators } from 'reactstrap';
 
-const ImageGalleryPost= () => {
-  const [file, setFile] = useState();
+
+const Gallery = () => {
   const [uploadedFileData, setUploadedFileData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
-
-  const saveFile = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const uploadFile = async () => {
-    const formData = new FormData();
-    formData.append("imageFile", file);
-
-    try {
-      const res = await axios.post("https://localhost:7046/api/Image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(res);
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
 
   const getFileData = async () => {
     try {
@@ -42,6 +19,10 @@ const ImageGalleryPost= () => {
       console.log(ex);
     }
   };
+
+  useEffect(() => {
+    getFileData();
+  }, []);
 
   const next = () => {
     if (animating) return;
@@ -66,16 +47,12 @@ const ImageGalleryPost= () => {
       </CarouselItem>
     );
   });
+
   return (
     <div>
-        <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-      <input type="file" onChange={saveFile} />
-      <Button variant="contained" color="secondary" onClick={uploadFile}>Upload</Button>&nbsp;
-      <Button variant="outlined" color="secondary" onClick={getFileData}>View Gallery</Button>
       {uploadedFileData.length > 0 && (
         <div>
-          <br></br>
+          <br />
           <h3>Image Gallery</h3>
           <div style={{ maxWidth: '650px', height: '600px', margin: '0 auto' }}>
             <Carousel activeIndex={activeIndex} next={next} previous={previous}>
@@ -87,10 +64,8 @@ const ImageGalleryPost= () => {
           </div>
         </div>
       )}
-      </CardContent>
-      </Card>
     </div>
   );
 };
 
-export default ImageGalleryPost;
+export default Gallery;

@@ -63,7 +63,8 @@ const Manage = () => {
   return (
     <div>
       <h3>Approval</h3>
-      {data.map((row) => (
+      {data.length > 0 ? (
+      data.map((row) => (
         <Card key={row.userId} style={{ margin: '10px', maxWidth: '400px' }}>
           <CardContent>
             <Typography variant="h5" component="h2">
@@ -91,7 +92,11 @@ const Manage = () => {
             </div>
           </CardContent>
         </Card>
-      ))}
+      ))
+      ) : (
+        <p>No requests.</p>
+      )}
+      
     </div>
   );
 };

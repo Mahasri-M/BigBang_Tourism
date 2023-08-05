@@ -351,18 +351,7 @@ if(role==='Agent'){
               {role === 'Agent' && (
             <AgentAgencyInput value={agency_Name} onChange={handleAgencyChange} />
           )}
-              {/* <div className="input-group mb-3">
-                <TextField
-                  id="outlined-agency-input"
-                  label="Agency Name"
-                  type="text"
-                  autoComplete="current-agency"
-                  style={{ width: '100%' }}
-                  value={agency_Name}
-                  onChange={handleAgencyChange}
-                />
-                <AgencyStrengthIndicator agency_Name={agency_Name} />
-              </div> */}
+              
               <div className="input-group mb-3">
                 <TextField
                   id="outlined-phone-input"

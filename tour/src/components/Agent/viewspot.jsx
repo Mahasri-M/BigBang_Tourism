@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
 
 const Viewspot = () => {
 
@@ -24,39 +25,37 @@ const Viewspot = () => {
   
   return (
     <div>
+      <Button variant="outlined" color="secondary" onClick={getFileData}>
+        View Spot
+      </Button>
 
-      <button onClick={getFileData}>Get File Data</button>
-      
       {uploadedFileData.length > 0 && (
         <div>
-          <h2>Uploaded File Data</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Package Name</th>
-                <th>Destination</th>
-                <th>Image</th>
-              </tr>
-            </thead>
-            <tbody>
-              {uploadedFileData.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.spotName}</td>
-                  <td>{item.location}</td>
-                  <td>
-                  
-                    {item.spotImage && (
-                      <img
-                        src={`data:image/jpeg;base64,${item.spotImage}`}
-                        alt={`Image ${index + 1}`}
-                        style={{ maxWidth: '100%', maxHeight: '100px' }}
-                      />
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <br></br>
+          <h3>Spot Details</h3>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+            {uploadedFileData.map((item, index) => (
+              <Card key={index} style={{ margin: '10px', maxWidth: '300px' }}>
+                <CardContent>
+                  <Typography variant="h5" component="h2">
+                    {item.spotName}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    {item.location}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    {item.description} 
+                  </Typography>
+                </CardContent>
+                <CardMedia
+                  component="img"
+                  src={`data:image/jpeg;base64,${item.spotImage}`}
+                  alt={`Image ${index + 1}`}
+                  style={{ width: '100%', height: '150px', objectFit: 'cover' }}
+                />
+              </Card>
+            ))}
+          </div>
         </div>
       )}
     </div>
