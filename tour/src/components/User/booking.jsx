@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
@@ -9,9 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -22,6 +20,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {Avatar, FormControl, InputLabel, ListItemAvatar } from "@mui/material";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+
+
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -43,6 +47,12 @@ const Booking = () => {
     const [selectedHotelId, setSelectedHotelId] = useState("");
     const [selectedRestaurantId, setSelectedRestaurantId] = useState("");
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [pdfUrl, setPdfUrl] = useState("");
+    const formDataRef = useRef(null);
+
+
+
 
     const [formData, setFormData] = useState({
         name: '',
@@ -59,29 +69,32 @@ const Booking = () => {
     };
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
-
-        if (name === 'startDate') {
-
-            const formattedDate = dayjs(value).format('YYYY-MM-DD');
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: formattedDate,
-            }));
-        } else if (name === 'hotel') {
-            setSelectedHotelId(value);
-        } else if (name === 'restaurant') {
-            setSelectedRestaurantId(value);
-        }
-
-        else {
-
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
-        }
+      const { name, value } = event.target;
+    
+      if (name === 'startDate') {
+        const formattedDate = dayjs(value).format('YYYY-MM-DD');
+        setFormData((prevData) => ({
+          ...prevData,
+          startDate: formattedDate,
+        }));
+      } else if (name === 'hotel') {
+        setSelectedHotelId(value);
+      } else if (name === 'restaurant') {
+        setSelectedRestaurantId(value);
+      } else if (name === 'adult' || name === 'child') {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+          totalPrice: calculateTotalPrice().toFixed(2), 
+        }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: value,
+        }));
+      }
     };
+    
 
 
     const calculateTotalPrice = () => {
@@ -112,34 +125,71 @@ const Booking = () => {
         const restaurant = restaurantData.find((restaurant) => restaurant.restaurentId === selectedRestaurantId);
         const selectedRestaurant = restaurant ? restaurant.restaurentName : null;
 
+        const formDataCopy = { ...formData, hotelId: selectedHotelId, restaurentId: selectedRestaurantId };
+        formDataRef.current = formDataCopy;
 
+        setIsPopupOpen(true);
         try {
             const doc = new jsPDF();
             doc.text('Booking Details', 10, 10);
-            doc.text(`Name: ${formData.name}`, 10, 20);
-            doc.text(`Email: ${formData.email}`, 10, 30);
-            doc.text(`Phone Number: ${formData.phone_Number}`, 10, 40);
-            doc.text(`Adult: ${formData.adult}`, 10, 50);
-            doc.text(`Child: ${formData.child}`, 10, 60);
-            const totalPrice = calculateTotalPrice().toFixed(2);
-            doc.text(`Total Price: ${totalPrice}`, 10, 70);
+            // doc.text(`Name: ${formData.name}`, 10, 20);
+            // doc.text(`Email: ${formData.email}`, 10, 30);
+            // doc.text(`Phone Number: ${formData.phone_Number}`, 10, 40);
+            // doc.text(`Adult: ${formData.adult}`, 10, 50);
+            // doc.text(`Child: ${formData.child}`, 10, 60);
+            // const totalPrice = calculateTotalPrice().toFixed(2);
+            // doc.text(`Total Price: ${totalPrice}`, 10, 70);
 
-            doc.text(`Package Name: ${packageDetails.packageName}`, 10, 90);
-            doc.text(`Location: ${packageDetails.destination}`, 10, 100);
-            doc.text(`Duration: ${packageDetails.duration}`, 10, 110);
-            doc.text(`Price for Adult: ${packageDetails.priceForAdult}`, 10, 120);
-            doc.text(`Price for Child: ${packageDetails.priceForChild}`, 10, 130);
+            const bookingDetailsTable = [
+              ['Traveller Details', ''],
+              ['Name', formData.name],
+              ['Email', formData.email],
+              ['Phone Number', formData.phone_Number],
+              ['Adult', formData.adult],
+              ['Child', formData.child],
+              ['Total Price', calculateTotalPrice().toFixed(2)],
+            ];
+      
+            doc.autoTable({
+              startY: 30,
+              head: [bookingDetailsTable[0]],
+              body: bookingDetailsTable.slice(1),
+              theme: 'grid', 
+            });
 
-            doc.text(`Hotel Name: ${selectedHotel ? selectedHotel : 'N/A'}`, 10, 150);
-            doc.text(`Restaurant Name: ${selectedRestaurant ? selectedRestaurant : 'N/A'}`, 10, 160);
+            // doc.text(`Package Name: ${packageDetails.packageName}`, 10, 90);
+            // doc.text(`Location: ${packageDetails.destination}`, 10, 100);
+            // doc.text(`Duration: ${packageDetails.duration}`, 10, 110);
+            // doc.text(`Price for Adult: ${packageDetails.priceForAdult}`, 10, 120);
+            // doc.text(`Price for Child: ${packageDetails.priceForChild}`, 10, 130);
+
+            // doc.text(`Hotel Name: ${selectedHotel ? selectedHotel : 'N/A'}`, 10, 150);
+            // doc.text(`Restaurant Name: ${selectedRestaurant ? selectedRestaurant : 'N/A'}`, 10, 160);
+
+            const tableData = [
+              ['Package Name', packageDetails.packageName],
+              ['Location', packageDetails.destination],
+              ['Duration', packageDetails.duration],
+              ['Price for Adult', packageDetails.priceForAdult],
+              ['Price for Child', packageDetails.priceForChild],
+              ['Hotel Name', selectedHotel ? selectedHotel : 'N/A'],
+              ['Restaurant Name', selectedRestaurant ? selectedRestaurant : 'N/A'],
+            ];
+            doc.autoTable({
+              startY: 100,
+              head: [['Package Details', '']],
+              body: tableData,
+            });
+            
 
 
             //doc.save('booking_details.pdf');
             const pdfBlob = doc.output('blob');
 
             const pdfUrl = URL.createObjectURL(pdfBlob);
+            setPdfUrl(pdfUrl); 
 
-            window.open(pdfUrl);
+            //window.open(pdfUrl);
 
 
             const bookingData = {
@@ -151,6 +201,7 @@ const Booking = () => {
                 totalPrice: calculateTotalPrice()
 
             };
+
 
             await axios.post('https://localhost:7046/api/Book', bookingData);
 
@@ -165,7 +216,8 @@ const Booking = () => {
                 child: '',
 
             });
-
+            
+           // sendEmail(formData);
             // alert('Booking successful!');
 
 
@@ -176,6 +228,36 @@ const Booking = () => {
 
     };
 
+    const sendEmail = () => {
+      const formData = formDataRef.current;
+      if (!formData) {
+        alert("Form data is missing.");
+        return;
+      }
+    
+      const formattedStartDate = dayjs(formData.startDate).format('YYYY-MM-DD');
+      const totalPrice = parseFloat(formData.totalPrice);
+      const mailtoLink = `mailto:${formData.email}?subject=Booking Details&body=Dear ${formData.name},%0D%0A%0D%0AThank you for booking the following package:%0D%0A%0D%0APackage Name: ${packageDetails.packageName}%0D%0A%0D%0ADestination: ${packageDetails.destination}%0D%0A%0D%0ADuration: ${packageDetails.duration} days%0D%0A%0D%0AHotel Name: ${findSelectedHotel(selectedHotelId)?.hotelName || 'N/A'}%0D%0A%0D%0ARestaurant Name: ${findSelectedRestaurent(selectedRestaurantId)?.restaurentName || 'N/A'}%0D%0A%0D%0AStart Date: ${formattedStartDate}%0D%0A%0D%0ATotal Price: ${totalPrice.toFixed(2)}%0D%0A%0D%0AHappy Travelling!,%0D%0AThank You.`;
+    
+      window.open(mailtoLink);
+    };
+    
+    
+    
+    const handleClosePopup = () => {
+      setIsPopupOpen(false);
+      // const formData = formDataRef.current;
+      // sendEmail(formData);
+    };
+    
+    const handleDownloadPDF = () => {
+
+      const a = document.createElement("a");
+      a.href = pdfUrl;
+      a.download = "booking_details.pdf";
+
+      a.click();
+    };
 
     useEffect(() => {
 
@@ -369,7 +451,7 @@ const Booking = () => {
                     <br></br>
                 </div>
             </div>
-            <br></br>
+            <br></br><br></br>  <br></br>  <br></br>  <br></br>
 
             <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
@@ -464,6 +546,7 @@ const Booking = () => {
                                     onChange={(date) => handleChange({ target: { name: "startDate", value: date } })}
                                     disablePast
                                     views={['year', 'month', 'day']}
+                                   
                                 />
                             </LocalizationProvider>
 
@@ -561,7 +644,18 @@ const Booking = () => {
                     </div>
                 </div>
             </div>
-
+            <Dialog open={isPopupOpen} onClose={handleClosePopup}>
+    <DialogTitle>Booking Successful!</DialogTitle>
+    <DialogContent>
+      <Typography>Your booking has been successfully submitted.</Typography>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={() => window.open(pdfUrl)}>Open PDF</Button>
+      <Button onClick={handleDownloadPDF}>Download PDF</Button>
+      <Button onClick={() => sendEmail(formData)}>Send Email</Button>
+      <Button onClick={handleClosePopup}>Close</Button>
+    </DialogActions>
+  </Dialog>
 
         </div>
     );

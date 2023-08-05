@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
+
 const Manage = () => {
   const [data, setData] = useState([]);
 
@@ -18,6 +19,11 @@ const Manage = () => {
       });
   }, []);
 
+  const sendRejectionEmail = (userData) => {
+    const mailtoLink = `mailto:${userData.userEmail}?subject=Approval Details&body=Dear ${userData.userName},%0D%0A%0D%0AWe are writing to inform you that your request has been Rejected.%0D%0A%0D%0AAgency Name: ${userData.agency_Name}%0D%0A%0D%0AThank you.`;
+    window.location.href = mailtoLink;
+  };
+
   const handleApprove = (userId) => {
     console.log('Approve user with ID:', userId);
   
@@ -28,6 +34,8 @@ const Manage = () => {
   
       axios.post('https://localhost:7046/api/User/register', userDataWithoutId)
         .then((response) => {
+          const mailtoLink = `mailto:${userData.userEmail}?subject=Approval Details&body=Dear ${userData.userName},%0D%0A%0D%0AWe are writing to inform you that your request has been Approved.%0D%0A%0D%0AAgency Name: ${userData.agency_Name}%0D%0A%0D%0ABest regards,%0D%0AThank You.`;
+          window.location.href = mailtoLink;
           console.log('User registered successfully:', response.data);
   
           axios.delete(`https://localhost:7046/api/Dummy/${userId}`)
@@ -50,14 +58,18 @@ const Manage = () => {
   const handleDecline = (userId) => {
     console.log('Decline user with ID:', userId);
 
-    axios.delete(`https://localhost:7046/api/Dummy/${userId}`)
-      .then((response) => {
-        console.log('User declined and deleted successfully.');
-        setData((prevData) => prevData.filter((user) => user.userId !== userId));
-      })
-      .catch((error) => {
-        console.error('Error declining and deleting user:', error);
-      });
+    const userData = data.find((user) => user.userId === userId);
+    if (userData) {
+      axios.delete(`https://localhost:7046/api/Dummy/${userId}`)
+        .then((response) => {
+          console.log('User declined and deleted successfully.');
+          setData((prevData) => prevData.filter((user) => user.userId !== userId));
+          sendRejectionEmail(userData);
+        })
+        .catch((error) => {
+          console.error('Error declining and deleting user:', error);
+        });
+    }
   };
 
   return (
