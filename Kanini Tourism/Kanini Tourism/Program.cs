@@ -13,12 +13,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IGallery, ImageService>();
-builder.Services.AddScoped<IDay2Service, Day2Service>();
 builder.Services.AddScoped<IHotel, HotelService>();
 builder.Services.AddScoped<ITour, TourService>();
 builder.Services.AddScoped<IBook,BookingService>();
 builder.Services.AddScoped<IRestaurent,RestaurentService>();
 builder.Services.AddScoped<ISpot, SpotService>();
+builder.Services.AddScoped<IFeedback, FeedbackService>();
 
 
 builder.Services.AddCors(opts =>

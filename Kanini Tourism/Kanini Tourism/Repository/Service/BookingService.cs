@@ -31,7 +31,7 @@ namespace Kanini_Tourism.Repository.Service
 
             return await _UserContext.Bookings.ToListAsync();
         }
-
+        //Put
         public async Task<Booking?> UpdateBooking(int id, Booking updatedBooking)
         {
             var existingBooking = await _UserContext.Bookings.FindAsync(id);

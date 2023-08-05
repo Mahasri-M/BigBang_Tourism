@@ -27,6 +27,9 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Gallery\" />
+    <Folder Include="wwwroot\Hotels\" />
+    <Folder Include="wwwroot\Spots\" />
+    <Folder Include="wwwroot\Restaurents\" />
     <Folder Include="wwwroot\Packages\" />
   </ItemGroup>
 

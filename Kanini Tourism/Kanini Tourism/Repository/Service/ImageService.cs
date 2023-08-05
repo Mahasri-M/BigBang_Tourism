@@ -34,7 +34,7 @@ namespace Kanini_Tourism.Repository.Service
             }
 
             var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Gallery");
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            var fileName = imageFile.FileName;
             var filePath = Path.Combine(uploadsFolder, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))

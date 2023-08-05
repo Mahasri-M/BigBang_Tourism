@@ -1,5 +1,6 @@
 ﻿using Kanini_Tourism.Models;
 using Kanini_Tourism.Repository.Interface;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,19 +11,65 @@ namespace Kanini_Tourism.Controllers
     public class RestaurentController : ControllerBase
     {
          private readonly IRestaurent _user;
-        public RestaurentController(IRestaurent user)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public RestaurentController(IRestaurent user, IWebHostEnvironment webHostEnvironment)
         {
             _user = user;
+            _webHostEnvironment = webHostEnvironment;
         }
         [HttpGet]
-        public IEnumerable<Restaurent> Get()
+        public IActionResult GetAllRestaurents()
         {
-            return _user.GetAllrestaurents();
+            var images = _user.GetAllrestaurents();
+            if (images == null)
+            {
+                return NotFound();
+            }
+
+            var imageList = new List<Restaurent>();
+            foreach (var image in images)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Restaurents");
+                var filePath = Path.Combine(uploadsFolder, image.RestaurentImage);
+
+                var imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+                var tourPackageData = new Restaurent
+                {
+                    RestaurentId = image.RestaurentId,
+                    RestaurentName = image.RestaurentName,
+                    Location = image.Location,
+                    RestaurentImage = Convert.ToBase64String(imageBytes)
+                };
+
+                imageList.Add(tourPackageData);
+            }
+
+            return new JsonResult(imageList);
         }
         [HttpGet("{id}")]
-        public Restaurent GetById(int id)
+        public IActionResult GetRestaurentById(int id)
         {
-            return _user.GetrestaurentById(id);
+            var tourPackage = _user.GetrestaurentById(id);
+            if (tourPackage == null)
+            {
+                return NotFound();
+            }
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Restaurents");
+            var filePath = Path.Combine(uploadsFolder, tourPackage.RestaurentImage);
+
+            var imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+            var tourPackageData = new Restaurent
+            {
+                RestaurentId = tourPackage.RestaurentId,
+                RestaurentName = tourPackage.RestaurentName,
+                Location = tourPackage.Location,
+                RestaurentImage = Convert.ToBase64String(imageBytes)
+            };
+
+            return new JsonResult(tourPackageData);
         }
 
         [HttpPost]
@@ -32,7 +79,7 @@ namespace Kanini_Tourism.Controllers
             try
             {
                 var createdRestaurent = await _user.Createrestaurent(restaurent, imageFile);
-                return CreatedAtAction("Get", new { id = createdRestaurent.RestaurentId }, createdRestaurent);
+                return CreatedAtAction("Post", createdRestaurent);
 
             }
             catch (ArgumentException ex)
@@ -70,12 +117,46 @@ namespace Kanini_Tourism.Controllers
         }
 
         // Destination
-        [HttpGet("filteringLocation")]
 
-        public IEnumerable<Restaurent> Filterlocation(string Location)
+        [HttpGet("Location")]
+        public IActionResult GetAllRestaurents(string location = null)
         {
-            return _user.FilterLocation(Location);
+            IEnumerable<Restaurent> images;
 
+            if (string.IsNullOrEmpty(location))
+            {
+                images = _user.GetAllrestaurents();
+            }
+            else
+            {
+                images = _user.FilterLocation(location);
+            }
+
+            if (images == null)
+            {
+                return NotFound();
+            }
+
+            var imageList = new List<Restaurent>();
+            foreach (var image in images)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Restaurents");
+                var filePath = Path.Combine(uploadsFolder, image.RestaurentImage);
+
+                var imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+                var hotelData = new Restaurent
+                {
+                    RestaurentId = image.RestaurentId,
+                    RestaurentName = image.RestaurentName,
+                    Location = image.Location,
+                    RestaurentImage = Convert.ToBase64String(imageBytes)
+                };
+
+                imageList.Add(hotelData);
+            }
+
+            return new JsonResult(imageList);
         }
     }
 }

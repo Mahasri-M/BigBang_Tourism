@@ -1,5 +1,6 @@
 ﻿using Kanini_Tourism.Models;
 using Kanini_Tourism.Repository.Interface;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,20 +11,68 @@ namespace Kanini_Tourism.Controllers
     public class SpotController : ControllerBase
     {
         private readonly ISpot _user;
-        public SpotController(ISpot user)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public SpotController(ISpot user, IWebHostEnvironment webHostEnvironment)
         {
             _user = user;
+            _webHostEnvironment = webHostEnvironment;
         }
         [HttpGet]
-        public IEnumerable<Spots> Get()
+        public IActionResult GetAllSpots()
         {
-            return _user.GetAllSpots();
+            var images = _user.GetAllSpots();
+            if (images == null)
+            {
+                return NotFound();
+            }
+
+            var imageList = new List<Spots>();
+            foreach (var image in images)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Spots");
+                var filePath = Path.Combine(uploadsFolder, image.SpotImage);
+
+                var imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+                var tourPackageData = new Spots
+                {
+                    SpotId = image.SpotId,
+                    SpotName = image.SpotName,
+                    Location = image.Location,
+                    SpotImage = Convert.ToBase64String(imageBytes)
+                };
+
+                imageList.Add(tourPackageData);
+            }
+
+            return new JsonResult(imageList);
         }
+
         [HttpGet("{id}")]
-        public Spots GetById(int id)
+        public IActionResult GetSpotById(int id)
         {
-            return _user.GetSpotsById(id);
+            var tourPackage = _user.GetSpotsById(id);
+            if (tourPackage == null)
+            {
+                return NotFound();
+            }
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Spots");
+            var filePath = Path.Combine(uploadsFolder, tourPackage.SpotImage);
+
+            var imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+            var tourPackageData = new Spots
+            {
+                SpotId = tourPackage.SpotId,
+                SpotName = tourPackage.SpotName,
+                Location = tourPackage.Location,
+                SpotImage = Convert.ToBase64String(imageBytes)
+            };
+
+            return new JsonResult(tourPackageData);
         }
+
         [HttpPost]
         public async Task<ActionResult<Spots>> Post([FromForm] Spots Spots, IFormFile imageFile)
         {
@@ -31,7 +80,7 @@ namespace Kanini_Tourism.Controllers
             try
             {
                 var createdSpots = await _user.CreateSpots(Spots, imageFile);
-                return CreatedAtAction("Get", new { id = createdSpots.SpotId }, createdSpots);
+                return CreatedAtAction("Post", createdSpots);
 
             }
             catch (ArgumentException ex)
@@ -69,12 +118,47 @@ namespace Kanini_Tourism.Controllers
         }
 
         // Destination
-        [HttpGet("filteringLocation")]
-
-        public IEnumerable<Spots> Filterlocation(string Location)
+        [HttpGet("Location")]
+        public IActionResult GetAllSpots(string location = null)
         {
-            return _user.FilterLocation(Location);
+            IEnumerable<Spots> images;
 
+            if (string.IsNullOrEmpty(location))
+            {
+                images = _user.GetAllSpots();
+            }
+            else
+            {
+                images = _user.FilterLocation(location);
+            }
+
+            if (images == null)
+            {
+                return NotFound();
+            }
+
+            var imageList = new List<Spots>();
+            foreach (var image in images)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Spots");
+                var filePath = Path.Combine(uploadsFolder, image.SpotImage);
+
+                var imageBytes = System.IO.File.ReadAllBytes(filePath);
+
+                var hotelData = new Spots
+                {
+                    SpotId = image.SpotId,
+                    SpotName = image.SpotName,
+                    Location = image.Location,
+                    SpotImage = Convert.ToBase64String(imageBytes)
+                };
+
+                imageList.Add(hotelData);
+            }
+
+            return new JsonResult(imageList);
         }
     }
+    
 }
+

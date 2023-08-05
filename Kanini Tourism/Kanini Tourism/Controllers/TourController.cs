@@ -128,14 +128,6 @@ namespace Kanini_Tourism.Controllers
             return Ok(users);
         }
 
-        // Destination
-        [HttpGet("filteringLocation")]
-
-        public IEnumerable<TourPackage> Filterlocation(string Destination)
-        {
-            return _user.FilterLocation(Destination);
-
-        }
 
         [HttpGet("Location")]
         public IActionResult GetAllImages(string destination = null)
