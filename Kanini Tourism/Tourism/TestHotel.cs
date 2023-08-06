@@ -12,14 +12,11 @@ using System.IO;
 using System;
 using Microsoft.Extensions.FileProviders;
 
-namespace Kanini_Tourism.Test
+namespace Kanini_Tourism.Tests
 {
-    public class HotelControllerTests
+    public class HotelTests
     {
-        // ... Other test methods ...
-
-        // ... Other test methods ...
-
+       
 
         [Fact]
         public void GetAllImages_ReturnsListOfHotels()
@@ -31,7 +28,7 @@ namespace Kanini_Tourism.Test
         new Hotels { HotelId = 1, HotelName = "Tour 1", Location = "Destination 1",  HotelImage = "image1.jpg" },
         new Hotels { HotelId = 2, HotelName = "Tour 2", Location = "Destination 2", HotelImage = "image2.jpg" }
     };
-            // Set up the mock repository to return null for GetAllTours()
+           
             mockRepository.Setup(repo => repo.GetAllHotels()).Returns(() => null);
             var controller = new HotelController(mockRepository.Object, Mock.Of<IWebHostEnvironment>());
 
@@ -58,7 +55,7 @@ namespace Kanini_Tourism.Test
             mockRepository.Setup(repo => repo.GetHotelById(1)).Returns(expectedTour);
 
             var mockWebHostEnvironment = Mock.Of<IWebHostEnvironment>();
-            // Set up the WebRootPath to return a test path for Packages folder
+   
             Mock.Get(mockWebHostEnvironment).Setup(env => env.WebRootPath).Returns("D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot");
 
             var controller = new HotelController(mockRepository.Object, mockWebHostEnvironment);
@@ -70,10 +67,9 @@ namespace Kanini_Tourism.Test
             var actionResult = Assert.IsType<JsonResult>(result);
             var actualTour = Assert.IsType<Hotels>(actionResult.Value);
 
-            // Add additional assertions to verify the properties of the returned TourPackage object
             Assert.Equal(expectedTour.HotelId, actualTour.HotelId);
             Assert.Equal(expectedTour.HotelName, actualTour.HotelName);
-            // Add more assertions for other properties if needed.
+        
         }
 
         [Fact]
@@ -81,7 +77,7 @@ namespace Kanini_Tourism.Test
         {
             // Arrange
             var mockRepository = new Mock<IHotel>();
-            // Set up the mock repository to return null for HotelId=2
+     
             mockRepository.Setup(repo => repo.GetHotelById(2)).Returns(() => null);
             var mockWebHostEnvironment = Mock.Of<IWebHostEnvironment>();
             var controller = new HotelController(mockRepository.Object, mockWebHostEnvironment);
@@ -94,7 +90,7 @@ namespace Kanini_Tourism.Test
             Assert.Equal(StatusCodes.Status404NotFound, notFoundResult.StatusCode);
         }
 
-        // Test Post action method
+      
         [Fact]
         public async Task CreateHotel_ValidHotel_ReturnsCreatedHotel()
         {
@@ -116,15 +112,14 @@ namespace Kanini_Tourism.Test
             var result = await controller.Post(expectedHotel, mockFormFile.Object);
 
             // Assert
-            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result); // Update this line
+            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result); 
             var actualCreatedHotel = Assert.IsType<Hotels>(createdAtActionResult.Value);
             Assert.Equal(expectedHotel.HotelId, actualCreatedHotel.HotelId);
             Assert.Equal(expectedHotel.HotelName, actualCreatedHotel.HotelName);
-            // Add more assertions for other properties if needed.
+          
         }
 
 
-        // Test Put action method
         [Fact]
         public async Task UpdateHotel_ValidHotel_ReturnsUpdatedHotel()
         {
@@ -158,10 +153,9 @@ namespace Kanini_Tourism.Test
             var actualUpdatedHotel = Assert.IsType<Hotels>(okResult.Value);
             Assert.Equal(updatedHotel.HotelId, actualUpdatedHotel.HotelId);
             Assert.Equal(updatedHotel.HotelName, actualUpdatedHotel.HotelName);
-            // Add more assertions for other properties if needed.
+         
         }
 
-        // Test DeleteHotelById action method
         [Fact]
         public async Task DeleteHotel_ExistingId_ReturnsDeletedHotelList()
         {
@@ -187,7 +181,7 @@ namespace Kanini_Tourism.Test
             var actualDeletedHotelList = Assert.IsType<List<Hotels>>(okResult.Value);
             Assert.Single(actualDeletedHotelList);
             Assert.Equal(hotelToDelete.HotelId, actualDeletedHotelList[0].HotelId);
-            // Add more assertions for other properties if needed.
+          
         }
 
         [Fact]
@@ -203,10 +197,9 @@ namespace Kanini_Tourism.Test
             mockRepository.Setup(repo => repo.FilterLocation("Location 1")).Returns(expectedHotels.Where(h => h.Location == "Location 1"));
 
             var mockWebHostEnvironment = new Mock<IWebHostEnvironment>();
-            // Set up the WebRootPath to return a valid value (e.g., "wwwroot")
+        
             mockWebHostEnvironment.Setup(env => env.WebRootPath).Returns("D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot");
 
-            // Mock the file reading process
             var mockFileProvider = new Mock<IFileProvider>();
             mockFileProvider.Setup(provider => provider.GetFileInfo(It.IsAny<string>()))
                             .Returns((string path) => new NotFoundFileInfo(path));
@@ -221,14 +214,14 @@ namespace Kanini_Tourism.Test
             var actionResult = Assert.IsType<JsonResult>(result);
             var actualHotels = Assert.IsType<List<Hotels>>(actionResult.Value);
 
-            // Additional logging to inspect the properties of the hotels
+        
             foreach (var hotel in actualHotels)
             {
                 Console.WriteLine($"HotelId: {hotel.HotelId}, HotelName: {hotel.HotelName}, Location: {hotel.Location}, HotelImage: {hotel.HotelImage}");
             }
 
             Assert.Equal(expectedHotels.Count, actualHotels.Count);
-            // Add more assertions to compare hotel properties if needed.
+   
         }
 
 

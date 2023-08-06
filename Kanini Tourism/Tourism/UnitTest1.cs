@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
-namespace Kanini_Tourism.Tests.ServiceTests
+namespace Kanini_Tourism.Tests
 {
     public class FeedbackServiceTests
     {

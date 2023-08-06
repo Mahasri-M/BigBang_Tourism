@@ -24,8 +24,10 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 import HomeIcon from '@mui/icons-material/Home';
 import Searchpage from './searchpage';
 import Gallery from './gallery';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
+
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -108,7 +110,11 @@ export default function MiniDrawer() {
     setSelectedPage(pageName);
     handleDrawerClose();
   };
-  
+  const navigate= useNavigate();
+const handleLogout = () => {
+  localStorage.removeItem('token');
+  navigate('/login');
+};
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -235,6 +241,7 @@ export default function MiniDrawer() {
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
+        onClick={handleLogout}
       >
         <ListItemIcon
           sx={{

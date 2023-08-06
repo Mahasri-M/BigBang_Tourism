@@ -11,6 +11,7 @@ import axios from "axios";
 import Usernav from "./usernav";
 import NearMeIcon from '@mui/icons-material/NearMe';
 import ExploreDestinations from "./theme";
+import Feedback from "../Homepage/feedback";
 
 
 const Searchpage =()=>{
@@ -65,6 +66,8 @@ const Searchpage =()=>{
         <br></br>
  
        <ExploreDestinations/>
+       <br></br>
+       <Feedback/>
         </div>
     );
 };

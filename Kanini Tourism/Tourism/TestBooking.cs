@@ -9,20 +9,19 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace Kanini_Tourism.Tests.ServiceTests
+namespace Kanini_Tourism.Tests
 {
-    public class BookingServiceTests
+    public class BookingTests
     {
         private Mock<IBook> _mockBookingService;
         private BookController _controller;
 
-        public BookingServiceTests()
+        public BookingTests()
         {
             _mockBookingService = new Mock<IBook>();
             _controller = new BookController(_mockBookingService.Object);
         }
 
-        // Get_ReturnsListOfBooking Test
         [Fact]
         public void Get_ReturnsListOfBooking()
         {
@@ -61,7 +60,7 @@ namespace Kanini_Tourism.Tests.ServiceTests
             {
                 new Booking { BookingId = 1, Name = "John Doe", Email = "john@example.com", StartDate = DateTime.Now.AddDays(1), Adult = 2, Child = 1, TotalPrice = 300 },
                 new Booking { BookingId = 2, Name = "Jane Smith", Email = "jane@example.com", StartDate = DateTime.Now.AddDays(2), Adult = 1, Child = 0, TotalPrice = 150 },
-                newBooking, // Newly added booking
+                newBooking, 
             };
             _mockBookingService.Setup(repo => repo.AddBooking(newBooking)).ReturnsAsync(expectedBookings);
 
@@ -75,7 +74,7 @@ namespace Kanini_Tourism.Tests.ServiceTests
             Assert.Equal(expectedBookings, actualBookings);
         }
 
-        // Update_ExistingBooking_ReturnsOkObjectResultWithUpdatedBooking Test
+
         [Fact]
         public async Task Update_ExistingBooking_ReturnsOkObjectResultWithUpdatedBooking()
         {
@@ -86,13 +85,13 @@ namespace Kanini_Tourism.Tests.ServiceTests
                 BookingId = 2,
                 Name = "Jane Smith",
                 Email = "jane@example.com",
-                StartDate = new DateTime(2023, 8, 11), // Set the expected date here
+                StartDate = new DateTime(2023, 8, 11), 
                 Adult = 2,
                 Child = 0,
                 TotalPrice = 200,
             };
 
-            // Simulate updating the booking by returning the updated booking
+       
             _mockBookingService.Setup(repo => repo.UpdateBooking(bookingIdToUpdate, It.IsAny<Booking>())).ReturnsAsync(updatedBooking);
 
             // Act
@@ -102,10 +101,9 @@ namespace Kanini_Tourism.Tests.ServiceTests
             var actionResult = Assert.IsType<OkObjectResult>(result);
             var actualBooking = Assert.IsType<Booking>(actionResult.Value);
 
-            // Check individual properties to ensure the booking is updated correctly
             Assert.Equal(updatedBooking.Name, actualBooking.Name);
             Assert.Equal(updatedBooking.Email, actualBooking.Email);
-            Assert.Equal(updatedBooking.StartDate, actualBooking.StartDate); // Check the StartDate property
+            Assert.Equal(updatedBooking.StartDate, actualBooking.StartDate); 
             Assert.Equal(updatedBooking.Adult, actualBooking.Adult);
             Assert.Equal(updatedBooking.Child, actualBooking.Child);
             Assert.Equal(updatedBooking.TotalPrice, actualBooking.TotalPrice);

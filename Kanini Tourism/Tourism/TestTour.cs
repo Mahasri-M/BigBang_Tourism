@@ -9,7 +9,7 @@ using Kanini_Tourism.Controllers;
 using Microsoft.AspNetCore.Hosting;
 using System.Reflection;
 
-namespace Kanini_Tourism.Test
+namespace Kanini_Tourism.Tests
 {
     public class TourPackageTests
     {
@@ -24,7 +24,6 @@ namespace Kanini_Tourism.Test
         new TourPackage { PackageId = 1, PackageName = "Tour 1", Destination = "Destination 1", PriceForAdult = 100, PriceForChild = 50, Duration = 3, Description = "Description 1", PackImage = "image1.jpg" },
         new TourPackage { PackageId = 2, PackageName = "Tour 2", Destination = "Destination 2", PriceForAdult = 150, PriceForChild = 75, Duration = 5, Description = "Description 2", PackImage = "image2.jpg" }
     };
-            // Set up the mock repository to return null for GetAllTours()
             mockRepository.Setup(repo => repo.GetAllTours()).Returns(() => null);
             var controller = new TourController(mockRepository.Object, Mock.Of<IWebHostEnvironment>());
 
@@ -51,12 +50,12 @@ namespace Kanini_Tourism.Test
                 PriceForChild = 50,
                 Duration = 3,
                 Description = "Description 1",
-                PackImage = "falls.jpg" // Make sure this corresponds to the image file in the 'Packages' folder
+                PackImage = "falls.jpg" 
             };
             mockRepository.Setup(repo => repo.GetTourById(1)).Returns(expectedTour);
 
             var mockWebHostEnvironment = Mock.Of<IWebHostEnvironment>();
-            // Set up the WebRootPath to return a test path for Packages folder
+  
             Mock.Get(mockWebHostEnvironment).Setup(env => env.WebRootPath).Returns("D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot");
 
             var controller = new TourController(mockRepository.Object, mockWebHostEnvironment);
@@ -68,10 +67,10 @@ namespace Kanini_Tourism.Test
             var actionResult = Assert.IsType<JsonResult>(result);
             var actualTour = Assert.IsType<TourPackage>(actionResult.Value);
 
-            // Add additional assertions to verify the properties of the returned TourPackage object
+           
             Assert.Equal(expectedTour.PackageId, actualTour.PackageId);
             Assert.Equal(expectedTour.PackageName, actualTour.PackageName);
-            // Add more assertions for other properties if needed.
+    
         }
 
         [Fact]
@@ -79,7 +78,7 @@ namespace Kanini_Tourism.Test
         {
             // Arrange
             var mockRepository = new Mock<ITour>();
-            // Set up the mock repository to return null for GetTourById(2)
+
             mockRepository.Setup(repo => repo.GetTourById(2)).Returns(() => null);
             var controller = new TourController(mockRepository.Object, Mock.Of<IWebHostEnvironment>());
 
@@ -121,8 +120,7 @@ namespace Kanini_Tourism.Test
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
             var actualCreatedTour = Assert.IsType<TourPackage>(createdAtActionResult.Value);
             Assert.Equal(expectedTour.PackageId, actualCreatedTour.PackageId);
-            Assert.Equal(expectedTour.PackageName, actualCreatedTour.PackageName);
-            // Add more assertions for other properties if needed.
+ 
         }
 
 

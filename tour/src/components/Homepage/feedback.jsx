@@ -1,4 +1,5 @@
-import React from "react";
+import React,{useState} from "react";
+import axios from "axios";
 import { NavLink } from "react-router-dom";
 import {
   Button,
@@ -24,6 +25,59 @@ function Feedback() {
   const [firstFocus, setFirstFocus] = React.useState(false);
   const [lastFocus, setLastFocus] = React.useState(false);
   const [emailFocus, setEmailFocus] = React.useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [description, setDescription] = useState("");
+  const [rating, setRating] = useState("");
+
+  
+const nameid = localStorage.getItem('nameid');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const feedbackData = {
+      Name: name,
+      Email: email,
+      Description: description,
+      Rating: parseInt(rating),
+      userId:nameid
+    };
+
+
+    axios.post("https://localhost:7046/api/Feedback", feedbackData)
+      .then((response) => {
+
+        console.log("Feedback submitted successfully.");
+      })
+      .catch((error) => {
+
+        console.error("Error submitting feedback:", error);
+      });
+  };
+
+  const handleStarClick = (clickedRating) => {
+    setRating(clickedRating);
+  };
+
+  const generateStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      const filled = i <= rating;
+      stars.push(
+        <span
+          key={i}
+          role="img"
+          aria-label={`star-${i}`}
+          style={{ cursor: "pointer", fontSize: "24px" }}
+          onClick={() => handleStarClick(i)}
+        >
+          {filled ? "⭐️" : "☆"}
+        </span>
+      );
+    }
+    return stars;
+  };
+
   return (
     <>
     <div className="section">
@@ -99,7 +153,8 @@ function Feedback() {
                       type="text"
                       onFocus={() => setFirstFocus(true)}
                       onBlur={() => setFirstFocus(false)}
-                      
+                      onChange={(e) => setName(e.target.value)}
+                      value={name}
                     ></Input>
                   </InputGroup>
                   <InputGroup style={{borderRadius:20, backgroundColor: "#039AF4"}}
@@ -112,6 +167,8 @@ function Feedback() {
                       type="text"
                       onFocus={() => setLastFocus(true)}
                       onBlur={() => setLastFocus(false)}
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
                     ></Input>
                   </InputGroup>
                   <InputGroup style={{borderRadius:20, backgroundColor: "#039AF4"}}
@@ -124,7 +181,22 @@ function Feedback() {
                       type="text"
                       onFocus={() => setEmailFocus(true)}
                       onBlur={() => setEmailFocus(false)}
+                      onChange={(e) => setDescription(e.target.value)}
+                      value={description}
                     ></Input>
+                  </InputGroup>
+                  
+                  <InputGroup style={{borderRadius:20, backgroundColor: "#039AF4"}}
+                    className={
+                      "no-border" + (emailFocus ? " input-group-focus" : "")
+                    }
+                  >
+                    
+
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        {generateStars(rating)}
+      </div>
+   
                   </InputGroup>
                 </CardBody>
                 <CardFooter className="text-center">
@@ -132,7 +204,7 @@ function Feedback() {
                     className="btn-neutral btn-round"
                     color="info"
                     href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={handleSubmit}
                     size="lg"
                   >
                   Hit me !
@@ -141,11 +213,7 @@ function Feedback() {
               </Form>
             </Card>
           </Row>
-          <div className="col text-center">
-            <Button className="btn-round btn-white">
-             <NavLink style={{color:'white',fontSize:15}} to="/login">Or Login Here</NavLink>
-            </Button>
-          </div>
+          
         </Container>
       </div>
     </>
