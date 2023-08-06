@@ -26,9 +26,9 @@ const Manage = () => {
 
     const templateParams = {
       to_name: userData.userName,
-      recipient_email: userData.userEmail,
-      agency_Name: userData.agency_Name,
-      status:'Approved!'
+      to_email: userData.userEmail,
+      // agency_Name: userData.agency_Name,
+      message: 'Your request has been Approved!'
     };
 
     emailjs.send(serviceId, templateId, templateParams, userId)
@@ -51,9 +51,9 @@ const Manage = () => {
 
     const templateParams = {
       to_name: userData.userName,
-      recipient_email: userData.userEmail,
-      agency_Name: userData.agency_Name,
-      status: 'Rejected!'
+      to_email: userData.userEmail,
+      // agency_Name: userData.agency_Name,
+      message: 'Your request has been Rejected!'
     };
 
     emailjs.send(serviceId, templateId, templateParams, userId)

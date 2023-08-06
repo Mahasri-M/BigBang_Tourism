@@ -51,6 +51,8 @@ const Booking = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [pdfUrl, setPdfUrl] = useState("");
     const formDataRef = useRef(null);
+    const [otpVerified, setOtpVerified] = useState(false);
+
 
 
 
@@ -283,6 +285,94 @@ const Booking = () => {
             alert('Failed to send the email. Please try again later.');
             console.error('Error sending the email:', error);
           });
+      };
+
+      const [email, setEmail] = useState('');
+      const [otp, setOTP] = useState([]);
+      const [status, setStatus] = useState('');
+      const [showOTPField, setShowOTPField] = useState(true); 
+      const [generatedOTP, setGeneratedOTP] = useState('');
+      const inputRefs = useRef([]);
+    
+      function generateOTP() {
+        return Math.floor(100000 + Math.random() * 900000);
+      }
+    
+      const handleSendOTP = () => {
+        const newGeneratedOTP = generateOTP();
+        setGeneratedOTP(newGeneratedOTP);
+    
+        const serviceID = 'KaniniTourism';
+        const templateID = 'template_ezgwz3b'; 
+        const userID = 'eKtqdRwigRV6DRuta';
+    
+        const templateParams = {
+          to_email: email,
+          message: `Your OTP is: ${newGeneratedOTP}`,
+        };
+    
+        emailjs.send(serviceID, templateID, templateParams, userID)
+          .then(() => {
+            setStatus('OTP sent successfully.');
+            setOTP([]);
+            if (inputRefs.current.length > 0) {
+              inputRefs.current[0].focus();
+            }
+            setTimeout(() => {
+                setGeneratedOTP('');
+              }, 60000);
+          })
+          .catch(() => {
+            setStatus('Failed to send OTP.');
+          });
+      };
+    
+      const handleVerifyOTP = () => {
+    
+        const generatedOTPCorrect = parseInt(generatedOTP, 10);
+        const userOTPCorrect = parseInt(otp.join(''), 10);
+        
+    
+        if (userOTPCorrect === generatedOTPCorrect) {
+          setStatus('OTP verified successfully.');
+          setOtpVerified(true);
+        } else {
+          setStatus('Invalid OTP. Please try again.');
+          setOtpVerified(false);
+        }
+      };
+    
+      const handleArrowNavigation = (index, event) => {
+        if (event.key === 'ArrowLeft' && inputRefs.current[index - 1]) {
+    
+          inputRefs.current[index - 1].focus();
+        } else if (event.key === 'ArrowRight' && inputRefs.current[index + 1]) {
+    
+          inputRefs.current[index + 1].focus();
+        }
+      };
+    
+      const handleBackspace = (index, event) => {
+        if (event.key === 'Backspace' && !otp[index] && inputRefs.current[index - 1]) {
+    
+          const updatedOTP = [...otp];
+          updatedOTP[index - 1] = '';
+          setOTP(updatedOTP);
+          inputRefs.current[index - 1].focus();
+        }
+      };
+    
+      const handleInputChangeOTP = (index, value) => {
+     
+        const updatedOTP = [...otp];
+        updatedOTP[index] = value.replace(/\D/g, '');
+        // updatedOTP[index] = value;
+    
+        setOTP(updatedOTP);
+    
+        if (value && inputRefs.current[index + 1]) {
+          inputRefs.current[index + 1].focus();
+        }
       };
     
     const handleClosePopup = () => {
@@ -685,19 +775,89 @@ const Booking = () => {
                     </div>
                 </div>
             </div>
-            <Dialog open={isPopupOpen} onClose={handleClosePopup}>
+            <div>   
+            <Dialog open={isPopupOpen} onClose={handleClosePopup} style={{width:'1500px',height:'850px',marginTop:'-57px'}}>
+           
+            <div style={{ background: 'black', width: '100%', height: '60px', borderRadius: '5px 5px 0 0' }} />
     <DialogTitle>Booking Successful!</DialogTitle>
     <DialogContent>
-      <Typography>Your booking has been successfully submitted.</Typography>
+    <TextField
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        label="Enter your email"
+        variant="outlined"
+        margin="normal"
+        fullWidth
+      />
+    
+      <Button variant="contained" color="primary" onClick={handleSendOTP}>
+        Send OTP
+      </Button>
+     
     </DialogContent>
-    <DialogActions>
+    <Typography style={{paddingLeft:'20px'}}>Enter OTP:</Typography>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {Array.from({ length: 6 }, (_, index) => (
+              <input
+                key={index}
+                type="tel"
+                value={otp[index] || ''}
+                onChange={(e) => handleInputChangeOTP(index, e.target.value)}
+                onKeyDown={(e) => {
+                    handleArrowNavigation(index, e);
+                    handleBackspace(index, e);
+                  }}
+                ref={(el) => (inputRefs.current[index] = el)}
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  fontSize: '24px',
+                  margin: '8px',
+                  textAlign: 'center',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  outline: 'none',
+                }}
+                maxLength={1}
+                inputMode="numeric"
+              />
+            ))}
+          </div>
+        
+    <DialogActions style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+   
+    <Button onClick={handleVerifyOTP} variant="contained">
+            Verify OTP
+          </Button>
+<br></br>
+<br></br>
+          <Typography variant="overline" color="error" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+        {status}
+      </Typography>
+<br></br>
+          {otpVerified && (
+      <>
+      <div style={{display:'flex',flexDirection:'row'}}>
+        <Button onClick={() => window.open(pdfUrl)}>Open PDF</Button>
+        <Button onClick={handleDownloadPDF}>Download PDF</Button>
+        <Button onClick={() => sendEmail(formData)}>Send Email</Button>
+        <Button onClick={handleClosePopup}>Close</Button>
+        </div>
+      </>
+    )}
+
+          {/* <Typography>Your booking has been successfully submitted.</Typography>
       <Button onClick={() => window.open(pdfUrl)}>Open PDF</Button>
       <Button onClick={handleDownloadPDF}>Download PDF</Button>
-      <Button onClick={() => sendEmail(formData)}>Send Email</Button>
-      <Button onClick={handleClosePopup}>Close</Button>
+      <Button onClick={() => sendEmail(formData)}>Send Email</Button> */}
+     
     </DialogActions>
+    <div style={{ background: 'black', width: '100%', height: '60px', borderRadius: '0 0 5px 5px', marginTop: '140px', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'white' }} />
+      </div>
   </Dialog>
-
+  </div>
         </div>
     );
 };

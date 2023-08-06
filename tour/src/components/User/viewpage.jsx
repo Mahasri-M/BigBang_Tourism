@@ -67,6 +67,8 @@ const Viewpage = () => {
     navigate("/sidenav");
   };
 
+  
+
   if (!uploadedFileData || uploadedFileData.length === 0) {
     return <p>No data </p>;
   }
