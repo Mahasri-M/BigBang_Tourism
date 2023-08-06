@@ -34,6 +34,17 @@ namespace Kanini_Tourism.Repository.Service
             return await _context.Users.FirstOrDefaultAsync(u => u.UserEmail == email);
         }
 
+        public async Task<IEnumerable<User>> GetAllUsersByRole()
+        {
+            return await _context.Users.Where(u => u.Role == "User").ToListAsync();
+        }
+        public async Task<IEnumerable<User>> GetAllAgentByRole()
+        {
+            return await _context.Users.Where(u => u.Role == "Agent").ToListAsync();
+        }
+
+
+
         private string Encrypt(string password)
         {
             string passphrase = "your-passphrase";

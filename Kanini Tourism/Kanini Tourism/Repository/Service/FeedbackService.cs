@@ -41,13 +41,14 @@ namespace Kanini_Tourism.Repository.Service
 
             existingFeedback.Name = updatedFeedback.Name;
             existingFeedback.Email = updatedFeedback.Email;
-            existingFeedback.Description = updatedFeedback.Description;
+            existingFeedback.Description = updatedFeedback.Description; 
             existingFeedback.Rating = updatedFeedback.Rating;
 
             await _UserContext.SaveChangesAsync();
 
             return existingFeedback;
         }
+
 
         //Delete
         public async Task<List<Feedback>?> DeleteFeedbackById(int id)

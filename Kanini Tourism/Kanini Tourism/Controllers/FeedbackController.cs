@@ -15,9 +15,10 @@ namespace Kanini_Tourism.Controllers
             _user = user;
         }
         [HttpGet]
-        public IEnumerable<Feedback> Get()
+        public ActionResult<IEnumerable<Feedback>> Get()
         {
-            return _user.GetAllFeedback();
+            var feedbacks = _user.GetAllFeedback();
+            return Ok(feedbacks);
         }
         [HttpGet("{id}")]
         public Feedback GetById(int id)

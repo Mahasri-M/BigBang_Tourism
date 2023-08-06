@@ -22,6 +22,27 @@ namespace Kanini_Tourism.Controllers
             _userRepository = userRepository;
         }
 
+        [HttpGet("getAllUsers")]
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+        {
+            var users = await _userRepository.GetAllUsers();
+            return Ok(users);
+        }
+
+        [HttpGet("getUsersByRole")]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersByRole()
+        {
+            var users = await _userRepository.GetAllUsersByRole();
+            return Ok(users);
+        }
+
+        [HttpGet("getAgentByRole")]
+        public async Task<ActionResult<IEnumerable<User>>> GetAgentByRole()
+        {
+            var users = await _userRepository.GetAllAgentByRole();
+            return Ok(users);
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(User user)
         {

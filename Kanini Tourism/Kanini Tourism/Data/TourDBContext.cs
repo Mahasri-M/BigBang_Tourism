@@ -5,7 +5,7 @@ namespace Kanini_Tourism.Data
 {
     public class TourDBContext:DbContext
     {
-        public TourDBContext(DbContextOptions options):base(options) { }
+        public TourDBContext(DbContextOptions<TourDBContext> options):base(options) { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<ImageGallery> ImageGallery { get; set; }
@@ -19,8 +19,11 @@ namespace Kanini_Tourism.Data
         public DbSet<Dummy> Dummy { get; set; }
 
         public virtual DbSet<Imagetbl> Imagetbls { get; set; }
+        public TourDBContext()
+        {
+            // This constructor is needed for testing with Moq
+        }
 
-       
-        
+
     }
 }

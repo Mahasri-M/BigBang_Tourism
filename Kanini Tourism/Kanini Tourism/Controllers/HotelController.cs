@@ -29,7 +29,7 @@ namespace Kanini_Tourism.Controllers
             var imageList = new List<Hotels>();
             foreach (var image in images)
             {
-                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Packages");
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Hotels");
                 var filePath = Path.Combine(uploadsFolder, image.HotelImage);
 
                 var imageBytes = System.IO.File.ReadAllBytes(filePath);
@@ -57,7 +57,7 @@ namespace Kanini_Tourism.Controllers
                 return NotFound();
             }
 
-            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Packages");
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Hotels");
             var filePath = Path.Combine(uploadsFolder, tourPackage.HotelImage);
 
             var imageBytes = System.IO.File.ReadAllBytes(filePath);
