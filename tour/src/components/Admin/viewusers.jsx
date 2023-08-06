@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import { Page, Text, View, Document, StyleSheet, Image, pdf } from '@react-pdf/renderer';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import * as XLSX from "xlsx";
 
 
 const styles = StyleSheet.create({
@@ -68,7 +69,26 @@ const PDFView = ({ data }) => (
 
  
 const Viewusers=()=>{
+   
+
     const [uploadedFileData, setUploadedFileData] = useState([]);
+
+const handleDownloadExcel = () => {
+  if (uploadedFileData.length > 0) {
+    const excelData = uploadedFileData.map((item) => ({
+      "User Name": item.userName,
+      "User Email": item.userEmail,
+      "Phone Number": item.phone_Number,
+  
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "User Details");
+
+    XLSX.writeFile(workbook, "user_details.xlsx");
+  }
+};
 
     const getFileData = async () => {
       try {
@@ -117,7 +137,10 @@ return(
 &nbsp;&nbsp;
   <Button variant="outlined" color="primary" onClick={handleOpenPDF}>
     Open PDF
-  </Button>
+  </Button>&nbsp;&nbsp;
+      <Button variant="outlined" color="primary" onClick={handleDownloadExcel}>
+        Download Excel
+      </Button>
   </>
 )}
 {uploadedFileData.length > 0 && (

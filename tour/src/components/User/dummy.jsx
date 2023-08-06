@@ -1,570 +1,156 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { toast, ToastContainer } from 'react-toastify';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import {Avatar, FormControl, InputLabel, ListItemAvatar } from "@mui/material";
+import emailjs from 'emailjs-com';
 
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import '../../components/User/booking.css';
+const Manage = () => {
+  const [data, setData] = useState([]);
 
-const Booking = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const packageDetails = location.state?.packageDetails || null;
-    const [hotelData, setHotelData] = useState([]);
-    const [restaurantData, setRestaurantData] = useState([]);
-    const [spotsData, setSpotsData] = useState([]);
-    const [hotelId, setHotelId] = useState("");
-    const [restaurentId, setSelectedRestaurentId] = useState("");
-    const searchParams = new URLSearchParams(location.search);
+  useEffect(() => {
+    axios.get('https://localhost:7046/api/Dummy')
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
-    const selectedHotels = searchParams.get('hotels')?.split(',') || [];
-    const selectedRestaurants = searchParams.get('restaurants')?.split(',') || [];
-    const [selectedHotelId, setSelectedHotelId] = useState("");
-    const [selectedRestaurantId, setSelectedRestaurantId] = useState("");
+  const sendApprovalEmail = (userData) => {
+    const serviceId = 'KaniniTourism';
+    const templateId = 'template_ezgwz3b';
+    const userId = 'eKtqdRwigRV6DRuta';
 
-
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone_Number: '',
-        startDate: '',
-        totalPrice: '',
-        adult: '',
-        child: '',
-    });
-
-    const handleNavClick = () => {
-        navigate("/sidenav");
+    const templateParams = {
+      to_name: userData.userName,
+      recipient_email: userData.userEmail,
+      agency_Name: userData.agency_Name,
     };
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-
-        if (name === 'startDate') {
-
-            const formattedDate = dayjs(value).format('YYYY-MM-DD');
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: formattedDate,
-            }));
-        } else if (name === 'hotel') {
-            setSelectedHotelId(value);
-        } else if (name === 'restaurant') {
-            setSelectedRestaurantId(value);
+    emailjs.send(serviceId, templateId, templateParams, userId)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Approval email sent successfully!');
+        } else {
+          console.error('Failed to send approval email.');
         }
+      })
+      .catch((error) => {
+        console.error('Error sending approval email:', error);
+      });
+  };
 
-        else {
+  const sendRejectionEmail = (userData) => {
+    const serviceId = 'KaniniTourism';
+    const templateId = 'template_rejection'; 
+    const userId = 'eKtqdRwigRV6DRuta';
 
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
+    const templateParams = {
+      to_name: userData.userName,
+      recipient_email: userData.userEmail,
+      agency_Name: userData.agency_Name,
+    };
+
+    emailjs.send(serviceId, templateId, templateParams, userId)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Rejection email sent successfully!');
+        } else {
+          console.error('Failed to send rejection email.');
         }
-    };
+      })
+      .catch((error) => {
+        console.error('Error sending rejection email:', error);
+      });
+  };
 
+  const handleApprove = (userId) => {
+    console.log('Approve user with ID:', userId);
 
-    const calculateTotalPrice = () => {
-        const adultCount = parseInt(formData.adult) || 0;
-        const childCount = parseInt(formData.child) || 0;
-        const adultPrice = parseFloat(packageDetails.priceForAdult) || 0;
-        const childPrice = parseFloat(packageDetails.priceForChild) || 0;
-        return (adultCount * adultPrice) + (childCount * childPrice);
-    };
+    const userData = data.find((user) => user.userId === userId);
 
-    const findSelectedHotel = (selectedHotelId) => {
-        return hotelData.find((hotel) => hotel.hotelId === selectedHotelId);
-      };
+    if (userData) {
+      const { userId, ...userDataWithoutId } = userData;
 
-      const findSelectedRestaurent= (selectedRestaurantId)=>{
-        return restaurantData.find((restaurent)=>restaurent.restaurentId === selectedRestaurantId);
-      }
-     
-    const handleSignUp = async (event) => {
-        event.preventDefault();
-        const { name, value } = event.target;
+      axios.post('https://localhost:7046/api/User/register', userDataWithoutId)
+        .then((response) => {
+          console.log('User registered successfully:', response.data);
 
-        console.log(name, value);
+          sendApprovalEmail(userData);
 
-        const hotel = hotelData.find((hotel) => hotel.hotelId === selectedHotelId);
-        const selectedHotel = hotel ? hotel.hotelName : null;
-
-        const restaurant = restaurantData.find((restaurant) => restaurant.restaurentId === selectedRestaurantId);
-        const selectedRestaurant = restaurant ? restaurant.restaurentName : null;
-
-
-        try {
-            const doc = new jsPDF();
-            doc.text('Booking Details', 10, 10);
-            doc.text(`Name: ${formData.name}`, 10, 20);
-            doc.text(`Email: ${formData.email}`, 10, 30);
-            doc.text(`Phone Number: ${formData.phone_Number}`, 10, 40);
-            doc.text(`Adult: ${formData.adult}`, 10, 50);
-            doc.text(`Child: ${formData.child}`, 10, 60);
-            const totalPrice = calculateTotalPrice().toFixed(2);
-            doc.text(`Total Price: ${totalPrice}`, 10, 70);
-
-            doc.text(`Package Name: ${packageDetails.packageName}`, 10, 90);
-            doc.text(`Location: ${packageDetails.destination}`, 10, 100);
-            doc.text(`Duration: ${packageDetails.duration}`, 10, 110);
-            doc.text(`Price for Adult: ${packageDetails.priceForAdult}`, 10, 120);
-            doc.text(`Price for Child: ${packageDetails.priceForChild}`, 10, 130);
-
-            doc.text(`Hotel Name: ${selectedHotel ? selectedHotel : 'N/A'}`, 10, 150);
-            doc.text(`Restaurant Name: ${selectedRestaurant ? selectedRestaurant : 'N/A'}`, 10, 160);
-
-
-            //doc.save('booking_details.pdf');
-            const pdfBlob = doc.output('blob');
-
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-
-            window.open(pdfUrl);
-
-
-            const bookingData = {
-                ...formData,
-                packageId: packageDetails.packageId,
-                hotelId: selectedHotelId,
-                restaurentId: selectedRestaurantId,
-                user: "2",
-                totalPrice: calculateTotalPrice()
-
-            };
-
-            await axios.post('https://localhost:7046/api/Book', bookingData);
-
-
-            setFormData({
-                name: '',
-                email: '',
-                phone_Number: '',
-                startDate: '',
-                totalPrice: '',
-                adult: '',
-                child: '',
-
+          axios.delete(`https://localhost:7046/api/Dummy/${userId}`)
+            .then(() => {
+              console.log('User removed from Dummy table.');
+              setData((prevData) => prevData.filter((user) => user.userId !== userId));
+            })
+            .catch((error) => {
+              console.error('Error removing user from Dummy table:', error);
             });
-
-            // alert('Booking successful!');
-
-
-        } catch (error) {
-            console.error('Error submitting form data:', error);
-            alert('Failed to submit booking. Please try again later.');
-        }
-
-    };
-
-
-    useEffect(() => {
-
-        async function fetchHotelData() {
-            try {
-                const res = await axios.get(`https://localhost:7046/api/Hotel/Location?location=${packageDetails.destination}`, {
-                    responseType: "json",
-                });
-                if (Array.isArray(res.data)) {
-                    setHotelData(res.data);
-                } else {
-                    console.log("Invalid", res.data);
-                }
-            } catch (ex) {
-                console.log("Error:", ex);
-            }
-        }
-
-        async function fetchRestaurantData() {
-            try {
-                const res = await axios.get(`https://localhost:7046/api/Restaurent/Location?location=${packageDetails.destination}`, {
-                    responseType: "json",
-                });
-                if (Array.isArray(res.data)) {
-                    setRestaurantData(res.data);
-                } else {
-                    console.log("Invalid", res.data);
-                }
-            } catch (ex) {
-                console.log("Error:", ex);
-            }
-        }
-
-        const getSpotData = async () => {
-
-            const res = await axios.get(`https://localhost:7046/api/spot/Location?location=${packageDetails.destination}`, {
-                responseType: "json",
-            });
-            if (Array.isArray(res.data)) {
-                setSpotsData(res.data.slice(0, packageDetails.duration));
-            } else {
-                console.log("Invalid data format received:", res.data);
-            }
-
-        };
-
-        if (packageDetails) {
-            fetchHotelData();
-            fetchRestaurantData();
-            getSpotData();
-        }
-    }, [packageDetails]);
-
-
-
-    if (!packageDetails) {
-        return <p>No package details found.</p>;
+        })
+        .catch((error) => {
+          console.error('Error registering user:', error);
+        });
     }
+  };
 
-    return (
-        <div>
-            <Box sx={{ flexGrow: 1 }} >
-                <AppBar position="static" style={{ backgroundColor: '#e7afb7' }}>
-                    <Toolbar>
-                        <ArrowBackIcon
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={handleNavClick}
-                            sx={{ mr: 2 }}
-                        >
-                            <MenuIcon />
-                        </ArrowBackIcon>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            Make Your Trip
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-            </Box>
-            <br></br>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+  const handleDecline = (userId) => {
+    console.log('Decline user with ID:', userId);
 
-                <Card key={packageDetails.userId} style={{ margin: '10px', maxWidth: '850px' }} >
-                    <CardContent style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ flex: '0 0 30%', marginRight: '20px' }}>
-                            {packageDetails.packImage && (
-                                <img
-                                    src={`data:image/jpeg;base64,${packageDetails.packImage}`}
-                                    alt="Image"
-                                    style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-                                />
-                            )}
-                        </div>
+    const userData = data.find((user) => user.userId === userId);
+    if (userData) {
+      axios.delete(`https://localhost:7046/api/Dummy/${userId}`)
+        .then((response) => {
+          console.log('User declined and deleted successfully.');
+          setData((prevData) => prevData.filter((user) => user.userId !== userId));
+          sendRejectionEmail(userData);
+        })
+        .catch((error) => {
+          console.error('Error declining and deleting user:', error);
+        });
+    }
+  };
 
-                        <div style={{ flex: '1' }}>
-                            <Typography variant="h5" component="h2">
-                                {packageDetails.packageName}
-                            </Typography>
-                            <Typography color="textSecondary">
-                                {packageDetails.destination}
-                            </Typography>
-                            <Typography color="textSecondary">
-                                {packageDetails.duration} days
-                            </Typography>
-                            <Typography color="textSecondary">
-                                {packageDetails.priceForAdult}
-                            </Typography>
-                            <Typography color="textSecondary">
-                                {packageDetails.priceForChild}
-                            </Typography>
-                        </div>
-                    </CardContent>
-                </Card>
-
-            </div>
-            <br></br>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <div style={{ backgroundColor: '#f7e9ea', width: 1000, flexWrap: "wrap", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <div style={{ backgroundColor: '#e7afb7', width: 1000, height: 50, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <h5>Day Planner</h5>
-                    </div>
-                    <br></br>
-                    {spotsData.length > 0 && (
-
-                        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-
-                            {packageDetails.duration > 0 && (
-                                <div >
-                                    {spotsData.map((spot, index) => {
-                                        if (index === 0) {
-                                            return (
-                                                <div key={index}>
-                                                    <h5>Day 1</h5>
-                                                    <Card key={index} style={{ margin: '10px', maxWidth: '300px' }} className="spot-card">
-                                                        <CardContent>
-                                                            <Typography variant="h5" component="h2">
-                                                                {spot.spotName}
-                                                            </Typography>
-                                                            <Typography color="textSecondary" component="h1">
-                                                                {spot.location}
-                                                            </Typography>
-                                                            {spot.spotImage && (
-                                                                <img
-                                                                    src={`data:image/jpeg;base64,${spot.spotImage}`}
-                                                                    alt={`Image ${index + 1}`}
-                                                                    style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-                                                                />
-                                                            )}
-                                                        </CardContent>
-                                                    </Card>
-                                                </div>
-                                            );
-                                        }
-                                        return null;
-                                    })}
-                                </div>
-                            )}
-
-                            {Array.from({ length: packageDetails.duration - 1 }).map((_, dayIndex) => (
-                                <div key={dayIndex + 2}>
-                                    <h5>Day {dayIndex + 2}</h5>
-                                    {spotsData.map((spot, index) => {
-                                        if (index === dayIndex + 1) {
-                                            return (
-                                                <Card key={index} style={{ margin: '10px', maxWidth: '300px' }} className="spot-card">
-                                                    <CardContent>
-                                                        <Typography variant="h5" component="h2">
-                                                            {spot.spotName}
-                                                        </Typography>
-                                                        <Typography color="textSecondary" component="h1">
-                                                            {spot.location}
-                                                        </Typography>
-                                                        {spot.spotImage && (
-                                                            <img
-                                                                src={`data:image/jpeg;base64,${spot.spotImage}`}
-                                                                alt={`Image ${index + 1}`}
-                                                                style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-                                                            />
-                                                        )}
-                                                    </CardContent>
-                                                </Card>
-                                            );
-                                        }
-                                        return null;
-                                    })}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    <br></br>
-                </div>
-            </div>
-            <br></br>
-
-            <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>  <br></br>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-
-                <div className="card" style={{ width: 600, display: "flex", justifyContent: "center" }}>
-                    <div className="card-body text-center" >
-
-                        <h3 className="mb-4">Book Your Trip</h3>
-                        <div className="input-group mb-3">
-                            <TextField
-                                label="Name"
-                                variant="outlined"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                            />
-
-                        </div>
-                        <div className="input-group mb-3">
-                            <TextField
-                                label="Email"
-                                name="email"
-                                variant="outlined"
-                                value={formData.email}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                            />
-
-                        </div>
-
-
-                        <div className="input-group mb-3">
-                            <TextField
-                                label="Total Price"
-                                name="totalPrice"
-                                variant="outlined"
-                                value={calculateTotalPrice().toFixed(2)}
-                                disabled
-                                fullWidth
-                                margin="normal"
-                            />
-                        </div>
-                        <div className="input-group mb-4" style={{ position: "relative" }}>
-                            <TextField
-
-                                label="Adult"
-                                variant="outlined"
-
-                                name="adult"
-                                value={formData.adult}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                            />
-
-                        </div>
-
-                        <div className="input-group mb-4" style={{ position: "relative" }}>
-                            <TextField
-                                label="Child"
-                                variant="outlined"
-                                name="child"
-                                value={formData.child}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                            />
-
-                        </div>
-                        <div className="input-group mb-4" style={{ position: "relative" }}>
-                            <TextField
-                                label="Phone Number"
-                                name="phone_Number"
-                                variant="outlined"
-                                value={formData.phone_Number}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                            />
-                        </div>
-
-                        <div className="input-group mb-4" style={{ position: "relative" }}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    fullWidth
-                                    label="Check-in Date"
-                                    name="startDate"
-                                    value={formData.startDate}
-                                    onChange={(date) => handleChange({ target: { name: "startDate", value: date } })}
-                                    disablePast
-                                    views={['year', 'month', 'day']}
-                                />
-                            </LocalizationProvider>
-
-                        </div>
-
-                        <div className="input-group mb-4" style={{ position: "relative" }}>
-                        <FormControl fullWidth variant="outlined">
-                        <InputLabel htmlFor="restaurant-select">Choose Hotel</InputLabel>
-                            <Select
-                                name="hotel"
-                                value={selectedHotelId}
-                                onChange={handleChange}
-                                renderValue={()=>{
-                                    const selectedHotel = findSelectedHotel(selectedHotelId);
-                                    return (
-                                      <>
-                                        {selectedHotel && selectedHotel.hotelImage && (
-                                          <Avatar
-                                            alt={selectedHotel.hotelName}
-                                            src={`data:image/jpeg;base64,${selectedHotel.hotelImage}`}
-                                            style={{ width: 80, height: 80 }}
-                                          />
-                                        )}
-                                        {selectedHotel?.hotelName || "Select Hotel"}
-                                      </>
-                                    );
-                                  }}
-                                >
-                                {hotelData.map((hotel, index) => (
-                                    <MenuItem key={index} value={hotel.hotelId}>
-                                        <ListItemAvatar>
-                                            <Avatar src={`data:image/jpeg;base64,${hotel.hotelImage}`}
-                                            style={{width:300,height:300}}
-                                            />
-                                        </ListItemAvatar>
-                                       <h4> &nbsp;&nbsp;&nbsp;&nbsp;{hotel.hotelName}</h4>
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            </FormControl>
-                        </div>
-
-                        <br></br>
-                        <div className="input-group mb-4" style={{ position: "relative" }}>
-                        <FormControl fullWidth variant="outlined">
-                        <InputLabel htmlFor="restaurant-select">Choose Restaurant</InputLabel>
-                            
-                            <Select
-                                name="restaurant"
-                                value={selectedRestaurantId}
-                                onChange={handleChange}
-                                renderValue={()=>{
-                                    const selectedRestaurant = findSelectedRestaurent(selectedRestaurantId);
-                                    return (
-                                      <>
-                                        {selectedRestaurant && selectedRestaurant.restaurentImage && (
-                                          <Avatar
-                                            alt={selectedRestaurant.restaurentName}
-                                            src={`data:image/jpeg;base64,${selectedRestaurant.restaurentImage}`}
-                                            style={{ width: 80, height: 80 }}
-                                          />
-                                        )}
-                                        {selectedRestaurant?.restaurentName || "Select Restaurent"}
-                                      </>
-                                    );
-                                  }}
-                                >
-                                {restaurantData.map((restaurant, index) => (
-                                    <MenuItem key={index} value={restaurant.restaurentId}>
-                                         <ListItemAvatar>
-                                            <Avatar src={`data:image/jpeg;base64,${restaurant.restaurentImage}`}
-                                            style={{width:300,height:300}}
-                                            />
-                                        </ListItemAvatar>
-                                        <h4> &nbsp;&nbsp;&nbsp;&nbsp; {restaurant.restaurentName}</h4>
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            </FormControl>
-                        </div>
-                      
-                        <Typography variant="h6" component="h2">
-                            Total Price: {calculateTotalPrice().toFixed(2)}
-                        </Typography>
-
-                        <input type="hidden" name="packageId" value={packageDetails.packageId} />
-                        {selectedHotels.map((hotelId) => (
-                            <input key={hotelId} type="hidden" name="selectedHotels" value={hotelId} />
-                        ))}
-
-                        {selectedRestaurants.map((restaurentId) => (
-                            <input key={restaurentId} type="hidden" name="selectedRestaurents" value={restaurentId} />
-                        ))}
-                        <button className="btn btn-primary shadow-2 mb-4" type="button" onClick={handleSignUp}>Book</button>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-    );
+  return (
+    <div>
+      <h3>Approval</h3>
+      {data.length > 0 ? (
+        data.map((row) => (
+          <Card key={row.userId} style={{ margin: '10px', maxWidth: '400px' }}>
+            <CardContent>
+              <Typography variant="h5" component="h2">
+                {row.userName}
+              </Typography>
+              <Typography color="textSecondary">
+                {row.userEmail}
+              </Typography>
+              <Typography color="textSecondary">
+                {row.role}
+              </Typography>
+              <Typography color="textSecondary">
+                {row.agency_Name}
+              </Typography>
+              <Typography color="textSecondary">
+                {row.phone_Number}
+              </Typography>
+              <div style={{ marginTop: '10px' }}>
+                <Button variant="contained" color="success" onClick={() => handleApprove(row.userId)}>
+                  Approve
+                </Button>&nbsp; &nbsp;
+                <Button variant="contained" color="error" onClick={() => handleDecline(row.userId)}>
+                  Decline
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <p>No requests.</p>
+      )}
+    </div>
+  );
 };
 
-export default Booking;
+export default Manage;

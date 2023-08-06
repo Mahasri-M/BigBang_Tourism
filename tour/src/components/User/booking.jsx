@@ -24,6 +24,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import emailjs from 'emailjs-com';
 
 
 
@@ -228,21 +229,61 @@ const Booking = () => {
 
     };
 
+    // const sendEmail = () => {
+    //   const formData = formDataRef.current;
+    //   if (!formData) {
+    //     alert("Form data is missing.");
+    //     return;
+    //   }
+    
+    //   const formattedStartDate = dayjs(formData.startDate).format('YYYY-MM-DD');
+    //   const totalPrice = parseFloat(formData.totalPrice);
+    //   const mailtoLink = `mailto:${formData.email}?subject=Booking Details&body=Dear ${formData.name},%0D%0A%0D%0AThank you for booking the following package:%0D%0A%0D%0APackage Name: ${packageDetails.packageName}%0D%0A%0D%0ADestination: ${packageDetails.destination}%0D%0A%0D%0ADuration: ${packageDetails.duration} days%0D%0A%0D%0AHotel Name: ${findSelectedHotel(selectedHotelId)?.hotelName || 'N/A'}%0D%0A%0D%0ARestaurant Name: ${findSelectedRestaurent(selectedRestaurantId)?.restaurentName || 'N/A'}%0D%0A%0D%0AStart Date: ${formattedStartDate}%0D%0A%0D%0ATotal Price: ${totalPrice.toFixed(2)}%0D%0A%0D%0AHappy Travelling!,%0D%0AThank You.`;
+    
+    //   window.open(mailtoLink);
+    // };
+    
     const sendEmail = () => {
-      const formData = formDataRef.current;
-      if (!formData) {
-        alert("Form data is missing.");
-        return;
-      }
+        const formData = formDataRef.current;
+        if (!formData) {
+          alert("Form data is missing.");
+          return;
+        }
     
-      const formattedStartDate = dayjs(formData.startDate).format('YYYY-MM-DD');
-      const totalPrice = parseFloat(formData.totalPrice);
-      const mailtoLink = `mailto:${formData.email}?subject=Booking Details&body=Dear ${formData.name},%0D%0A%0D%0AThank you for booking the following package:%0D%0A%0D%0APackage Name: ${packageDetails.packageName}%0D%0A%0D%0ADestination: ${packageDetails.destination}%0D%0A%0D%0ADuration: ${packageDetails.duration} days%0D%0A%0D%0AHotel Name: ${findSelectedHotel(selectedHotelId)?.hotelName || 'N/A'}%0D%0A%0D%0ARestaurant Name: ${findSelectedRestaurent(selectedRestaurantId)?.restaurentName || 'N/A'}%0D%0A%0D%0AStart Date: ${formattedStartDate}%0D%0A%0D%0ATotal Price: ${totalPrice.toFixed(2)}%0D%0A%0D%0AHappy Travelling!,%0D%0AThank You.`;
+        const formattedStartDate = dayjs(formData.startDate).format('YYYY-MM-DD');
+        const totalPrice = parseFloat(formData.totalPrice);
     
-      window.open(mailtoLink);
-    };
+        const serviceId = 'KaniniTourism';
+    const templateId = 'template_booking'; 
+    const userId = 'eKtqdRwigRV6DRuta';
     
+        const templateParams = {
+          to_name: formData.name,
+          recipient_email: formData.email,
+          package_name: packageDetails.packageName,
+          destination: packageDetails.destination,
+          duration: packageDetails.duration,
+          start_date: formattedStartDate,
+          total_price: totalPrice.toFixed(2),
+          hotel_name: findSelectedHotel(selectedHotelId)?.hotelName || 'N/A',
+          restaurant_name: findSelectedRestaurent(selectedRestaurantId)?.restaurentName || 'N/A',
+        };
     
+        emailjs.send(serviceId, templateId, templateParams, userId)
+          .then((response) => {
+            if (response.status === 200) {
+              alert('Booking successful! Email sent successfully.');
+              console.log('Email sent successfully:', response);
+            } else {
+              alert('Failed to send the email. Please try again later.');
+              console.error('Failed to send the email:', response);
+            }
+          })
+          .catch((error) => {
+            alert('Failed to send the email. Please try again later.');
+            console.error('Error sending the email:', error);
+          });
+      };
     
     const handleClosePopup = () => {
       setIsPopupOpen(false);

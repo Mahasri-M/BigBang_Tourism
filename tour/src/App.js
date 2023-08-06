@@ -23,6 +23,7 @@ import AdminNav from './components/Admin/adminnav';
 import ImageGalleryPost from './components/Admin/gallerypost';
 import Viewusers from './components/Admin/viewusers';
 import Viewagent from './components/Admin/viewagent';
+import EmailSender from './components/User/dummy';
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
          <Route path="/adminnav" element={<AdminNav/>}/>
          <Route path="/viewusers" element={<Viewusers/>}/>
          <Route path="/viewagent" element={<Viewagent/>}/>
+         <Route path="/email" element={<EmailSender/>}/>
         
       </Routes>
       <ToastContainer/>
