@@ -174,5 +174,7 @@ namespace Kanini_Tourism.Controllers
             return new JsonResult(imageList);
         }
 
+      
+
     }
 }

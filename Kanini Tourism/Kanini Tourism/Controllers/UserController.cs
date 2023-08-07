@@ -1,5 +1,6 @@
 ﻿using Kanini_Tourism.Models;
 using Kanini_Tourism.Repository.Interface;
+using Kanini_Tourism.Repository.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +30,17 @@ namespace Kanini_Tourism.Controllers
             return Ok(users);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userRepository.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
         [HttpGet("getUsersByRole")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersByRole()
         {
@@ -43,6 +55,9 @@ namespace Kanini_Tourism.Controllers
             return Ok(users);
         }
 
+       
+
+
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(User user)
         {
@@ -51,15 +66,12 @@ namespace Kanini_Tourism.Controllers
                 return Problem("User repository is null.");
             }
 
-            // Encrypt the password before storing it
             user.Password = Encrypt(user.Password);
 
             var createdUser = await _userRepository.AddUser(user);
 
-            // Generate JWT token with user details
             var token = GenerateJwtToken(createdUser);
 
-            // Return the token as part of the response
             return Ok(token);
         }
 
@@ -72,7 +84,6 @@ namespace Kanini_Tourism.Controllers
                 return Problem("User repository is null.");
             }
 
-            // Find the user by their email
             var existingUser = await _userRepository.GetUserByEmail(loginModel.UserEmail);
 
             if (existingUser == null)
@@ -80,17 +91,14 @@ namespace Kanini_Tourism.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
-            // Decrypt the stored password and compare it with the provided password
             var decryptedPassword = Decrypt(existingUser.Password);
             if (loginModel.Password != decryptedPassword)
             {
                 return Unauthorized("Invalid credentials");
             }
 
-            // Passwords match, generate JWT token with user details
             var token = GenerateJwtToken(existingUser);
 
-            // Return the token as part of the response
             return Ok(token);
         }
 
@@ -119,7 +127,6 @@ namespace Kanini_Tourism.Controllers
 
         private string Encrypt(string password)
         {
-            // Example key and IV generation using hashing
             string passphrase = "your-passphrase";
 
             using (SHA256 sha256 = SHA256.Create())
@@ -152,7 +159,6 @@ namespace Kanini_Tourism.Controllers
         }
         private string Decrypt(string encryptedPassword)
         {
-            // Example key and IV generation using hashing
             string passphrase = "your-passphrase";
 
             using (SHA256 sha256 = SHA256.Create())

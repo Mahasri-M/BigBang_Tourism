@@ -9,5 +9,6 @@ namespace Kanini_Tourism.Repository.Interface
         Task<List<Booking>> AddBooking(Booking user);
         Task<Booking?> UpdateBooking(int id, Booking updatedBooking);
         Task<List<Booking>?> DeleteBookingById(int id);
+     
     }
 }

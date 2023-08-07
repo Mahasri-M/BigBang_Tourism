@@ -11,5 +11,6 @@ namespace Kanini_Tourism.Repository.Interface
         Task<TourPackage> UpdateTour(TourPackage tour, IFormFile imageFile);
         Task<List<TourPackage>?> DeleteTourById(int id);
         IEnumerable<TourPackage> FilterLocation(string Destination);
+       
     }
 }

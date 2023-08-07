@@ -7,9 +7,13 @@ namespace Kanini_Tourism.Repository.Interface
     {
         Task<User> AddUser(User user);
         Task<IEnumerable<User>> GetAllUsers();
+        Task<User> GetUserById(int userId);
         Task<User> GetUserByEmail(string email);
         Task<IEnumerable<User>> GetAllUsersByRole();
         Task<IEnumerable<User>> GetAllAgentByRole();
+       
+
+
 
     }
 }

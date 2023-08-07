@@ -29,6 +29,10 @@ namespace Kanini_Tourism.Repository.Service
             var users = await _context.Users.ToListAsync();
             return users;
         }
+        public async Task<User> GetUserById(int userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+        }
         public async Task<User> GetUserByEmail(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.UserEmail == email);
@@ -42,6 +46,8 @@ namespace Kanini_Tourism.Repository.Service
         {
             return await _context.Users.Where(u => u.Role == "Agent").ToListAsync();
         }
+
+       
 
 
 

@@ -25,6 +25,8 @@ namespace Kanini_Tourism.Controllers
             return _user.GetBookingById(id);
         }
 
+      
+
         [HttpPost]
         public async Task<ActionResult<List<Booking>>> Add(Booking user)
         {
