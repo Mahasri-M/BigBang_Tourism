@@ -53,9 +53,11 @@ const Searchpage =()=>{
                     <ListSubheader>Kerala</ListSubheader>
                     <MenuItem value="Wayanad">Wayanad</MenuItem>
                     <MenuItem value="Munnar">Munnar</MenuItem>
-                    <ListSubheader>Delhi</ListSubheader>
-                    <MenuItem value="Dubai">Dubai</MenuItem>
-                    <MenuItem value="Taj Mahal">Taj Mahal</MenuItem>
+                    <ListSubheader>Jammu and Kashmir</ListSubheader>
+                    <MenuItem value="Ladakh">Ladakh</MenuItem>
+                    <ListSubheader>Karanataka</ListSubheader>
+                    <MenuItem value="Coorg">Coorg</MenuItem>
+                    <MenuItem value="Chikkamagaluru">Chikkamagaluru</MenuItem>
                 </Select>
             </FormControl>
 
@@ -67,7 +69,7 @@ const Searchpage =()=>{
  
        <ExploreDestinations/>
        <br></br>
-       <Feedback/>
+  
         </div>
     );
 };

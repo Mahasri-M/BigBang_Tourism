@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -26,6 +27,7 @@ import Manage from './manage';
 import ImageGalleryPost from './gallerypost';
 import Viewusers from './viewusers';
 import Viewagent from './viewagent';
+import Adminaccount from './adminaccount';
 
 
 const drawerWidth = 240;
@@ -111,7 +113,11 @@ export default function AdminNav() {
     setSelectedPage(pageName);
     handleDrawerClose();
   };
-  
+  const navigate= useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -218,6 +224,7 @@ export default function AdminNav() {
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
+        onClick={() => handleMenuItemClick('Account')}  
       >
         <ListItemIcon
           sx={{
@@ -239,6 +246,7 @@ export default function AdminNav() {
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
+        onClick={handleLogout}
       >
         <ListItemIcon
           sx={{
@@ -261,6 +269,7 @@ export default function AdminNav() {
         {selectedPage === 'Gallery' && <ImageGalleryPost/>}
         {selectedPage === 'Viewusers' && <Viewusers/>}
         {selectedPage === 'Viewagent' && <Viewagent/>}
+        {selectedPage === 'Account' && <Adminaccount/>}
 
 
       </Box>

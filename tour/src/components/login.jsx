@@ -8,6 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import jwt_decode from 'jwt-decode';
 
+
 const EmailStrengthIndicator = (props) => {
   const { userEmail } = props;
 
@@ -75,6 +76,7 @@ const PasswordStrengthIndicator = (props) => {
 };
 
 const Login = () => {
+  
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -155,6 +157,7 @@ const Login = () => {
 
   return (
     <Aux>
+      
       <div className="auth-wrapper">
         <div className="auth-content">
           <div className="auth-bg">
@@ -198,14 +201,15 @@ const Login = () => {
                 onClick={handleLogin}
                 disabled={!isButtonEnabled}
               >Login</button>
-              <p className="mb-2 text-muted">Forgot password? <NavLink to="/auth/reset-password-1">Reset</NavLink></p>
               <p className="mb-0 text-muted">Don’t have an account? <NavLink to="/signup">Signup</NavLink></p>
             </div>
           </div>
         </div>
         <ToastContainer />
       </div>
+     
     </Aux>
+    
   );
 };
 

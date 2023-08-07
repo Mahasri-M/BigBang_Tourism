@@ -25,6 +25,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import Searchpage from './searchpage';
 import Gallery from './gallery';
 import { useNavigate } from 'react-router-dom';
+import Feedback from './userfeedback';
+import UserAccount from './useraccount';
 
 const drawerWidth = 240;
 
@@ -185,7 +187,7 @@ const handleLogout = () => {
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
         }}
-        
+        onClick={() => handleMenuItemClick('Feedback')}        
       >
         <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
           <FeedbackIcon />
@@ -194,20 +196,7 @@ const handleLogout = () => {
       </ListItemButton>
     </ListItem>
 
-    <ListItem disablePadding sx={{ display: 'block', flexGrow: 1, justifyContent: 'flex-end' }}>
-      <ListItemButton
-        sx={{
-          minHeight: 48,
-          justifyContent: open ? 'initial' : 'center',
-          px: 2.5,
-        }}
-      >
-        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-          <ContactsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Contact" sx={{ opacity: open ? 1 : 0 }} />
-      </ListItemButton>
-    </ListItem>
+   
   </List>
 
   <Divider /> <Divider />
@@ -227,6 +216,7 @@ const handleLogout = () => {
             mr: open ? 3 : 'auto',
             justifyContent: 'center',
           }}
+          onClick={() => handleMenuItemClick('Account')}     
         >
           <AccountCircleIcon />
         </ListItemIcon>
@@ -256,12 +246,16 @@ const handleLogout = () => {
       </ListItemButton>
     </ListItem>
   </List>
+   <script src="https://cdn.botpress.cloud/webchat/v0/inject.js"></script>
+    <script src="https://mediafiles.botpress.cloud/a6405fd6-1bd3-41b6-9d32-e8d071d128ea/webchat/config.js" defer></script> 
 </Drawer>
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {selectedPage === 'Home' && <Searchpage/>}
         {selectedPage === 'Gallery' && <Gallery />}
+        {selectedPage === 'Feedback' && <Feedback />}
+        {selectedPage === 'Account' && <UserAccount/>}
 
       </Box>
     </Box>

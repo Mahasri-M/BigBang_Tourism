@@ -779,7 +779,7 @@ const Booking = () => {
             <Dialog open={isPopupOpen} onClose={handleClosePopup} style={{width:'1500px',height:'850px',marginTop:'-57px'}}>
            
             <div style={{ background: 'black', width: '100%', height: '60px', borderRadius: '5px 5px 0 0' }} />
-    <DialogTitle>Booking Successful!</DialogTitle>
+    <DialogTitle>Verify to Book your Trip!</DialogTitle>
     <DialogContent>
     <TextField
         type="email"

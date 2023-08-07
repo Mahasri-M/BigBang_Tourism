@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -26,6 +27,9 @@ import Postpackage from '../Agent/postpackage';
 import Hotel from './posthotel';
 import Restaurent from './postrestaurent';
 import Spot from './postspot';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import Account from './account';
+import AgentAccount from './account';
 
 
 const drawerWidth = 240;
@@ -111,7 +115,11 @@ export default function AgentNav() {
     setSelectedPage(pageName);
     handleDrawerClose();
   };
-  
+  const navigate= useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -143,6 +151,23 @@ export default function AgentNav() {
   </DrawerHeader>
   <Divider />
   <List style={{ backgroundColor: '#f8e7e9', flexGrow: 1 }}>
+
+  <ListItem disablePadding sx={{ display: 'block' }}>
+      <ListItemButton
+        sx={{
+          minHeight: 48,
+          justifyContent: open ? 'initial' : 'center',
+          px: 2.5,
+        }}
+        onClick={() => handleMenuItemClick('Bookings')} 
+      >
+        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
+          <BookmarkAddedIcon/>
+        </ListItemIcon>
+        <ListItemText primary="Bookings" sx={{ opacity: open ? 1 : 0 }} />
+      </ListItemButton>
+    </ListItem>
+
     <ListItem disablePadding sx={{ display: 'block' }}>
       <ListItemButton
         sx={{
@@ -225,6 +250,7 @@ export default function AgentNav() {
             mr: open ? 3 : 'auto',
             justifyContent: 'center',
           }}
+          onClick={() => handleMenuItemClick('Account')} 
         >
           <AccountCircleIcon />
         </ListItemIcon>
@@ -238,7 +264,9 @@ export default function AgentNav() {
           minHeight: 48,
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
+          
         }}
+        onClick={handleLogout}
       >
         <ListItemIcon
           sx={{
@@ -261,6 +289,7 @@ export default function AgentNav() {
         {selectedPage === 'Hotel' && <Hotel/>}
         {selectedPage === 'Restaurent' && <Restaurent/>}
         {selectedPage === 'Spot' && <Spot/>}
+        {selectedPage === 'Account' && <AgentAccount/>}
 
 
       </Box>
