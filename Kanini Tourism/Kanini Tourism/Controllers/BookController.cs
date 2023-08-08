@@ -14,45 +14,128 @@ namespace Kanini_Tourism.Controllers
         {
             _user = user;
         }
+        //[HttpGet]
+        //public IEnumerable<Booking> Get()
+        //{
+        //    return _user.GetAllBooking();
+        //}
         [HttpGet]
-        public IEnumerable<Booking> Get()
+        public ActionResult<IEnumerable<Booking>> Get()
         {
-            return _user.GetAllBooking();
+            try
+            {
+                var bookings = _user.GetAllBooking();
+                return Ok(bookings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
+        //[HttpGet("{id}")]
+        //public Booking GetById(int id)
+        //{
+        //    return _user.GetBookingById(id);
+        //}
         [HttpGet("{id}")]
-        public Booking GetById(int id)
+        public ActionResult<Booking> GetById(int id)
         {
-            return _user.GetBookingById(id);
+            try
+            {
+                var booking = _user.GetBookingById(id);
+                if (booking == null)
+                {
+                    return NotFound();
+                }
+                return booking;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
 
-      
 
+
+        //[HttpPost]
+        //public async Task<ActionResult<List<Booking>>> Add(Booking user)
+        //{
+        //    var users = await _user.AddBooking(user);
+        //    return Ok(users);
+        //}
         [HttpPost]
         public async Task<ActionResult<List<Booking>>> Add(Booking user)
         {
-            var users = await _user.AddBooking(user);
-            return Ok(users);
+            try
+            {
+                var bookings = await _user.AddBooking(user);
+                return Ok(bookings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Update(int id, Booking updatedBooking)
+        //{
+        //    var existingBooking = await _user.UpdateBooking(id, updatedBooking);
+        //    if (existingBooking == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(existingBooking);
+        //}
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Booking updatedBooking)
         {
-            var existingBooking = await _user.UpdateBooking(id, updatedBooking);
-            if (existingBooking == null)
+            try
             {
-                return NotFound();
+                var existingBooking = await _user.UpdateBooking(id, updatedBooking);
+                if (existingBooking == null)
+                {
+                    return NotFound();
+                }
+                return Ok(existingBooking);
             }
-            return Ok(existingBooking);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
+
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<List<Booking>>> DeleteById(int id)
+        //{
+        //    var users = await _user.DeleteBookingById(id);
+        //    if (users is null)
+        //    {
+        //        return NotFound("userid not matching");
+        //    }
+        //    return Ok(users);
+        //}
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Booking>>> DeleteById(int id)
         {
-            var users = await _user.DeleteBookingById(id);
-            if (users is null)
+            try
             {
-                return NotFound("userid not matching");
+                var booking = await _user.DeleteBookingById(id);
+                if (booking == null)
+                {
+                    return NotFound("Booking not found.");
+                }
+                return Ok(booking);
             }
-            return Ok(users);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
     }
 }

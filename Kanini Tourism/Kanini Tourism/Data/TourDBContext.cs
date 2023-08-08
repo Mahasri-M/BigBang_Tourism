@@ -17,11 +17,9 @@ namespace Kanini_Tourism.Data
         public DbSet<Restaurent> Restaurents { get; set; }
         public DbSet<Spots> Spots { get; set; }
         public DbSet<Dummy> Dummy { get; set; }
-
-        public virtual DbSet<Imagetbl> Imagetbls { get; set; }
         public TourDBContext()
         {
-            // This constructor is needed for testing with Moq
+            
         }
 
 

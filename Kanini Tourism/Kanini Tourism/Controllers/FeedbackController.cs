@@ -14,34 +14,102 @@ namespace Kanini_Tourism.Controllers
         {
             _user = user;
         }
+        //[HttpGet]
+        //public ActionResult<IEnumerable<Feedback>> Get()
+        //{
+        //    var feedbacks = _user.GetAllFeedback();
+        //    return Ok(feedbacks);
+        //}
+
         [HttpGet]
         public ActionResult<IEnumerable<Feedback>> Get()
         {
-            var feedbacks = _user.GetAllFeedback();
-            return Ok(feedbacks);
+            try
+            {
+                var feedbacks = _user.GetAllFeedback();
+                return Ok(feedbacks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
+
+        //[HttpGet("{id}")]
+        //public Feedback GetById(int id)
+        //{
+        //    return _user.GetFeedbackById(id);
+        //}
         [HttpGet("{id}")]
-        public Feedback GetById(int id)
+        public ActionResult<Feedback> GetById(int id)
         {
-            return _user.GetFeedbackById(id);
+            try
+            {
+                var feedback = _user.GetFeedbackById(id);
+                if (feedback == null)
+                {
+                    return NotFound();
+                }
+                return feedback;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
+        //[HttpPost]
+        //public async Task<ActionResult<List<Feedback>>> Add(Feedback user)
+        //{
+        //    var users = await _user.AddFeedback(user);
+        //    return Ok(users);
+        //}
 
         [HttpPost]
         public async Task<ActionResult<List<Feedback>>> Add(Feedback user)
         {
-            var users = await _user.AddFeedback(user);
-            return Ok(users);
+            try
+            {
+                var users = await _user.AddFeedback(user);
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
+
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Update(int id, Feedback updatedFeedback)
+        //{
+        //    var existingFeedback = await _user.UpdateFeedback(id, updatedFeedback);
+        //    if (existingFeedback == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(existingFeedback);
+        //}
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Feedback updatedFeedback)
         {
-            var existingFeedback = await _user.UpdateFeedback(id, updatedFeedback);
-            if (existingFeedback == null)
+            try
             {
-                return NotFound();
+                var existingFeedback = await _user.UpdateFeedback(id, updatedFeedback);
+                if (existingFeedback == null)
+                {
+                    return NotFound();
+                }
+                return Ok(existingFeedback);
             }
-            return Ok(existingFeedback);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Feedback>>> DeleteById(int id)

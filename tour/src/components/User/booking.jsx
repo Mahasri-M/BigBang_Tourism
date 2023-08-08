@@ -5,11 +5,9 @@ import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { toast, ToastContainer } from 'react-toastify';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -25,9 +23,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import emailjs from 'emailjs-com';
-
-
-
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import '../../components/User/booking.css';
@@ -135,13 +130,7 @@ const Booking = () => {
         try {
             const doc = new jsPDF();
             doc.text('Booking Details', 10, 10);
-            // doc.text(`Name: ${formData.name}`, 10, 20);
-            // doc.text(`Email: ${formData.email}`, 10, 30);
-            // doc.text(`Phone Number: ${formData.phone_Number}`, 10, 40);
-            // doc.text(`Adult: ${formData.adult}`, 10, 50);
-            // doc.text(`Child: ${formData.child}`, 10, 60);
-            // const totalPrice = calculateTotalPrice().toFixed(2);
-            // doc.text(`Total Price: ${totalPrice}`, 10, 70);
+   
 
             const bookingDetailsTable = [
               ['Traveller Details', ''],
@@ -159,15 +148,6 @@ const Booking = () => {
               body: bookingDetailsTable.slice(1),
               theme: 'grid', 
             });
-
-            // doc.text(`Package Name: ${packageDetails.packageName}`, 10, 90);
-            // doc.text(`Location: ${packageDetails.destination}`, 10, 100);
-            // doc.text(`Duration: ${packageDetails.duration}`, 10, 110);
-            // doc.text(`Price for Adult: ${packageDetails.priceForAdult}`, 10, 120);
-            // doc.text(`Price for Child: ${packageDetails.priceForChild}`, 10, 130);
-
-            // doc.text(`Hotel Name: ${selectedHotel ? selectedHotel : 'N/A'}`, 10, 150);
-            // doc.text(`Restaurant Name: ${selectedRestaurant ? selectedRestaurant : 'N/A'}`, 10, 160);
 
             const tableData = [
               ['Package Name', packageDetails.packageName],
@@ -226,24 +206,10 @@ const Booking = () => {
 
         } catch (error) {
             console.error('Error submitting form data:', error);
-            alert('Failed to submit booking. Please try again later.');
+            alert('Fill all the details');
         }
 
     };
-
-    // const sendEmail = () => {
-    //   const formData = formDataRef.current;
-    //   if (!formData) {
-    //     alert("Form data is missing.");
-    //     return;
-    //   }
-    
-    //   const formattedStartDate = dayjs(formData.startDate).format('YYYY-MM-DD');
-    //   const totalPrice = parseFloat(formData.totalPrice);
-    //   const mailtoLink = `mailto:${formData.email}?subject=Booking Details&body=Dear ${formData.name},%0D%0A%0D%0AThank you for booking the following package:%0D%0A%0D%0APackage Name: ${packageDetails.packageName}%0D%0A%0D%0ADestination: ${packageDetails.destination}%0D%0A%0D%0ADuration: ${packageDetails.duration} days%0D%0A%0D%0AHotel Name: ${findSelectedHotel(selectedHotelId)?.hotelName || 'N/A'}%0D%0A%0D%0ARestaurant Name: ${findSelectedRestaurent(selectedRestaurantId)?.restaurentName || 'N/A'}%0D%0A%0D%0AStart Date: ${formattedStartDate}%0D%0A%0D%0ATotal Price: ${totalPrice.toFixed(2)}%0D%0A%0D%0AHappy Travelling!,%0D%0AThank You.`;
-    
-    //   window.open(mailtoLink);
-    // };
     
     const sendEmail = () => {
         const formData = formDataRef.current;
@@ -599,6 +565,7 @@ const Booking = () => {
                                 value={formData.name}
                                 onChange={handleChange}
                                 fullWidth
+                                required
                                 margin="normal"
                             />
 

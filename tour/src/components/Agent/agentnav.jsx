@@ -27,8 +27,6 @@ import Postpackage from '../Agent/postpackage';
 import Hotel from './posthotel';
 import Restaurent from './postrestaurent';
 import Spot from './postspot';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import Account from './account';
 import AgentAccount from './account';
 
 
@@ -152,21 +150,7 @@ export default function AgentNav() {
   <Divider />
   <List style={{ backgroundColor: '#f8e7e9', flexGrow: 1 }}>
 
-  <ListItem disablePadding sx={{ display: 'block' }}>
-      <ListItemButton
-        sx={{
-          minHeight: 48,
-          justifyContent: open ? 'initial' : 'center',
-          px: 2.5,
-        }}
-        onClick={() => handleMenuItemClick('Bookings')} 
-      >
-        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-          <BookmarkAddedIcon/>
-        </ListItemIcon>
-        <ListItemText primary="Bookings" sx={{ opacity: open ? 1 : 0 }} />
-      </ListItemButton>
-    </ListItem>
+ 
 
     <ListItem disablePadding sx={{ display: 'block' }}>
       <ListItemButton
