@@ -46,12 +46,21 @@ namespace Kanini_Tourism.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Feedback>>> DeleteById(int id)
         {
-            var users = await _user.DeleteFeedbackById(id);
-            if (users is null)
+            try
             {
-                return NotFound("userid not matching");
+                var customer = await _user.DeleteFeedbackById(id);
+                return Ok(customer);
             }
-            return Ok(users);
+            catch (ArithmeticException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            //var users = await _user.DeleteFeedbackById(id);
+            //if (users is null)
+            //{
+            //    return NotFound("userid not matching");
+            //}
+            //return Ok(users);
         }
     }
 }

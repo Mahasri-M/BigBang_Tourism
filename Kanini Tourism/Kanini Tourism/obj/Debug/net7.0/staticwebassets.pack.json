@@ -29,8 +29,16 @@
       "PackagePath": "staticwebassets\\Gallery\\manali.jpg"
     },
     {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Gallery\\mullayanagiri peak.jpg",
+      "PackagePath": "staticwebassets\\Gallery\\mullayanagiri peak.jpg"
+    },
+    {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Gallery\\ooty.jpg",
       "PackagePath": "staticwebassets\\Gallery\\ooty.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Gallery\\redfort.jpg",
+      "PackagePath": "staticwebassets\\Gallery\\redfort.jpg"
     },
     {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Gallery\\taj.jpg",
@@ -49,8 +57,48 @@
       "PackagePath": "staticwebassets\\Hotels\\accord.jpg"
     },
     {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\ayatana.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\ayatana.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\caravelle.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\caravelle.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\grand ladakh.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\grand ladakh.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\grandchola.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\grandchola.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\hotel leh.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\hotel leh.jpg"
+    },
+    {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\keralahotel.jpg",
       "PackagePath": "staticwebassets\\Hotels\\keralahotel.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\luxurycoorg.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\luxurycoorg.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\taj.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\taj.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Hotels\\vivanta.jpg",
+      "PackagePath": "staticwebassets\\Hotels\\vivanta.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Packages\\coorg.jpg",
+      "PackagePath": "staticwebassets\\Packages\\coorg.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Packages\\coorgg.jpg",
+      "PackagePath": "staticwebassets\\Packages\\coorgg.jpg"
     },
     {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Packages\\falls.jpg",
@@ -69,6 +117,14 @@
       "PackagePath": "staticwebassets\\Packages\\keralm.jpg"
     },
     {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Packages\\ladakh.jpg",
+      "PackagePath": "staticwebassets\\Packages\\ladakh.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Packages\\munnar.jpg",
+      "PackagePath": "staticwebassets\\Packages\\munnar.jpg"
+    },
+    {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Packages\\ooty.jpg",
       "PackagePath": "staticwebassets\\Packages\\ooty.jpg"
     },
@@ -77,8 +133,40 @@
       "PackagePath": "staticwebassets\\Restaurents\\a2b.jpg"
     },
     {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\barbeque.jpg",
+      "PackagePath": "staticwebassets\\Restaurents\\barbeque.jpg"
+    },
+    {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\coal.jpg",
       "PackagePath": "staticwebassets\\Restaurents\\coal.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\coorg cuisine.jpg",
+      "PackagePath": "staticwebassets\\Restaurents\\coorg cuisine.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\lamayu.jpg",
+      "PackagePath": "staticwebassets\\Restaurents\\lamayu.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\skywalk.jpg",
+      "PackagePath": "staticwebassets\\Restaurents\\skywalk.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\sns.jpg",
+      "PackagePath": "staticwebassets\\Restaurents\\sns.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\tamara.jpg",
+      "PackagePath": "staticwebassets\\Restaurents\\tamara.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Restaurents\\urban.jpg",
+      "PackagePath": "staticwebassets\\Restaurents\\urban.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\anamudi.jpg",
+      "PackagePath": "staticwebassets\\Spots\\anamudi.jpg"
     },
     {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\chembrapeak.jpg",
@@ -93,8 +181,36 @@
       "PackagePath": "staticwebassets\\Spots\\glassbridge.jpg"
     },
     {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\khardung la pass.jpg",
+      "PackagePath": "staticwebassets\\Spots\\khardung la pass.jpg"
+    },
+    {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\kolukumalai.jpg",
       "PackagePath": "staticwebassets\\Spots\\kolukumalai.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\lehpalace.jpg",
+      "PackagePath": "staticwebassets\\Spots\\lehpalace.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\madikeri.jpg",
+      "PackagePath": "staticwebassets\\Spots\\madikeri.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\mullayanagiri peak.jpg",
+      "PackagePath": "staticwebassets\\Spots\\mullayanagiri peak.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\nubra valley.jpg",
+      "PackagePath": "staticwebassets\\Spots\\nubra valley.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\rock climbing.jpg",
+      "PackagePath": "staticwebassets\\Spots\\rock climbing.jpg"
+    },
+    {
+      "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\trecking.jpg",
+      "PackagePath": "staticwebassets\\Spots\\trecking.jpg"
     },
     {
       "Id": "D:\\kanini training\\C#\\Kanini Tourism\\Kanini Tourism\\wwwroot\\Spots\\valparai.jpg",

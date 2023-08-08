@@ -56,7 +56,8 @@ namespace Kanini_Tourism.Repository.Service
             var users = await _UserContext.Feedbacks.FindAsync(id);
             if (users is null)
             {
-                return null;
+                throw new ArithmeticException("Invalid  id to delete");
+               
             }
             _UserContext.Remove(users);
             await _UserContext.SaveChangesAsync();

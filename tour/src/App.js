@@ -17,7 +17,6 @@ import Spot from './components/Agent/postspot';
 import AgentNav from './components/Agent/agentnav';
 import AdminNav from './components/Admin/adminnav';
 import ImageGalleryPost from './components/Admin/gallerypost';
-import Viewusers from './components/Admin/viewusers';
 import Viewagent from './components/Admin/viewagent';
 import BookingProtected from './components/Protected Routing/bookingProtected';
 import GalleryProtected from './components/Protected Routing/galleryProtected';

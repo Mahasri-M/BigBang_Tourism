@@ -106,10 +106,9 @@ const Login = () => {
         localStorage.setItem('token', token);
 
         const decodedToken = jwt_decode(token);
-        console.log('Token:', token);
-        console.log('Name:', userEmail);
-        console.log('Role:', decodedToken.role);
-        console.log('nameid', decodedToken.nameid);
+        // console.log('Token:', token);
+        // console.log('Role:', decodedToken.role);
+        // console.log('nameid', decodedToken.nameid);
         localStorage.setItem('nameid', decodedToken.nameid);
         if (decodedToken.role === "Admin") {
           toast.success('Hi Admin Login Successful');
@@ -157,7 +156,6 @@ const Login = () => {
 
   return (
     <Aux>
-      
       <div className="auth-wrapper">
         <div className="auth-content">
           <div className="auth-bg">
